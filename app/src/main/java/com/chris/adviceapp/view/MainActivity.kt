@@ -3,8 +3,8 @@ package com.chris.adviceapp.view
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
 import android.widget.TextView
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.chris.adviceapp.R
 import com.chris.adviceapp.api.AdviceService
@@ -17,6 +17,7 @@ class MainActivity : AppCompatActivity() {
     private val retrofitService = AdviceService.getInstance()
     private lateinit var viewModel: AdviceViewModel
     private val tvAdvice by lazy { findViewById<TextView>(R.id.tvAdvice) }
+    private val btnNewAdvice by lazy { findViewById<Button>(R.id.btnNewAdvice) }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,5 +37,6 @@ class MainActivity : AppCompatActivity() {
             Log.d("apiResponse", "It Worked =D")
             tvAdvice.setText(viewModel.adviceString.value?.slip?.advice.toString())
         }
+        btnNewAdvice.setOnClickListener { viewModel.getAdvice() }
     }
 }
