@@ -13,5 +13,4 @@ class AdviceViewModelFactory constructor(private val repository: AdviceRepositor
             throw IllegalArgumentException("ViewModel Not Found")
         }
     }
-
 }
