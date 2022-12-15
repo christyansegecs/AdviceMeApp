@@ -14,7 +14,6 @@ import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Test
 import org.junit.Assert.assertEquals
-import java.io.IOException
 
 
 @RunWith(AndroidJUnit4::class)
@@ -33,13 +32,11 @@ class AdviceDaoTest {
     }
 
     @After
-    @Throws(IOException::class)
     fun closeDb() {
         db.close()
     }
 
     @Test
-    @Throws(Exception::class)
     fun insertAndGetAdvice() = runBlocking {
         val advice = Advice("word")
         adviceDao.insert(advice)
@@ -48,7 +45,6 @@ class AdviceDaoTest {
     }
 
     @Test
-    @Throws(Exception::class)
     fun getAllAdvices() = runBlocking {
         val advice1 = Advice("aaa")
         adviceDao.insert(advice1)
