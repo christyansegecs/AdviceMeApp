@@ -15,7 +15,7 @@
         android:layout_marginEnd="20dp"
         android:gravity="center"
         android:text="Hello World!"
-        android:textSize="20dp"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -34,8 +34,7 @@
         android:id="@+id/btnNewAdvice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:text="next one"
+        android:text="@string/next_one"
         app:layout_constraintBottom_toTopOf="@+id/btnSaveAdvice"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -44,8 +43,7 @@
         android:id="@+id/btnSaveAdvice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:text="Save this advice"
+        android:text="@string/save_this_advice"
         app:layout_constraintBottom_toTopOf="@+id/btnList"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -55,7 +53,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
-        android:text="saved list"
+        android:text="@string/saved_list"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
