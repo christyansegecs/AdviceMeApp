@@ -6,12 +6,17 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 import androidx.activity.viewModels
+import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.chris.adviceapp.AdviceApplication
 import com.chris.adviceapp.R
 import com.chris.adviceapp.api.AdviceService
 import com.chris.adviceapp.database.models.Advice
+import com.chris.adviceapp.databinding.ActivityLoginBinding
+import com.chris.adviceapp.databinding.ActivityMainBinding
 import com.chris.adviceapp.repository.AdviceRepository
+import com.chris.adviceapp.util.AdviceState
 import com.chris.adviceapp.viewmodel.AdviceDatabaseViewModel
 import com.chris.adviceapp.viewmodel.AdviceDatabaseViewModelFactory
 import com.chris.adviceapp.viewmodel.AdviceViewModel
@@ -19,42 +24,63 @@ import com.chris.adviceapp.viewmodel.AdviceViewModelFactory
 
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var binding: ActivityMainBinding
+
     private val retrofitService = AdviceService.getInstance()
     private lateinit var viewModel: AdviceViewModel
     private val viewModelDB: AdviceDatabaseViewModel by viewModels {
         AdviceDatabaseViewModelFactory((application as AdviceApplication).repository)
     }
-    private val tvAdvice by lazy { findViewById<TextView>(R.id.tvAdvice) }
-    private val btnNewAdvice by lazy { findViewById<Button>(R.id.btnNewAdvice) }
-    private val btnSaveAdvice by lazy { findViewById<Button>(R.id.btnSaveAdvice) }
-    private val btnList by lazy { findViewById<Button>(R.id.btnList) }
-
+    private lateinit var currentAdvice : String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        this.binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(this.binding.root)
 
-        viewModel = ViewModelProvider(this, AdviceViewModelFactory(AdviceRepository(retrofitService))).get(
-            AdviceViewModel::class.java
-        )
+        setupViewModel()
+        viewModel.getAdvice()
+        handleAdvices()
     }
 
     override fun onStart() {
         super.onStart()
         viewModel.getAdvice()
-        viewModel.adviceString.observe(this) {
-            tvAdvice.setText(viewModel.adviceString.value?.slip?.advice.toString())
+
+        binding.btnNewAdvice.setOnClickListener { viewModel.getAdvice() }
+
+        binding.btnSaveAdvice.setOnClickListener {
+            viewModelDB.insert(Advice(currentAdvice))
         }
 
-        btnNewAdvice.setOnClickListener { viewModel.getAdvice() }
-
-        btnSaveAdvice.setOnClickListener {
-            viewModelDB.insert(Advice(viewModel.adviceString.value?.slip?.advice.toString()))
-        }
-
-        btnList.setOnClickListener {
+        binding.btnList.setOnClickListener {
             val intent = Intent(this, SavedAdvicesActivity::class.java)
             startActivity(intent)
         }
     }
+
+    fun handleAdvices() = lifecycleScope.launchWhenCreated{
+        viewModel._adviceStateFlow.collect {
+            when(it) {
+                is AdviceState.onLoading -> { binding.progressBar.isVisible=true }
+                is AdviceState.onError -> {
+                    AdviceState.onError(error("Error. Please try again"))
+                    binding.progressBar.isVisible = false }
+                is AdviceState.onSuccess -> {
+                    it.data.body()?.slip?.advice
+                    binding.tvAdvice.setText(it.data.body()?.slip?.advice)
+                    currentAdvice = it.data.body()?.slip?.advice.toString()
+                    binding.progressBar.isVisible=false
+                    }
+                is AdviceState.Empty -> {}
+            }
+        }
+    }
+
+    private fun setupViewModel() {
+        viewModel = ViewModelProvider(this, AdviceViewModelFactory(AdviceRepository(retrofitService))).get(
+            AdviceViewModel::class.java
+        )
+    }
+
 }

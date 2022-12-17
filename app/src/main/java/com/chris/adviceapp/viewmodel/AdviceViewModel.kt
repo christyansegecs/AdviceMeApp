@@ -1,19 +1,27 @@
 package com.chris.adviceapp.viewmodel
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.chris.adviceapp.model.Advice
+import androidx.lifecycle.viewModelScope
 import com.chris.adviceapp.repository.AdviceRepository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers.IO
+import com.chris.adviceapp.util.AdviceState
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 
 class AdviceViewModel constructor(private val repository: AdviceRepository)  : ViewModel() {
 
-    val adviceString = MutableLiveData<Advice?>()
+    val adviceStateFlow:MutableStateFlow<AdviceState> = MutableStateFlow(AdviceState.Empty)
+    val _adviceStateFlow: StateFlow<AdviceState> = adviceStateFlow
 
-    fun getAdvice() = CoroutineScope(IO).launch {
-        val request = repository.getAdvice1()
-        adviceString.postValue(request.body())
+    fun getAdvice() = viewModelScope.launch {
+        adviceStateFlow.value = AdviceState.onLoading
+        repository.getAdvice()
+            .catch { e ->
+                adviceStateFlow.value = AdviceState.onError(e)
+            }.collect{ data ->
+                adviceStateFlow.value = AdviceState.onSuccess(data)
+            }
     }
+
 }
