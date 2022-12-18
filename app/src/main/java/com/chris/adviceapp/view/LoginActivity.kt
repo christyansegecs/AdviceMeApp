@@ -29,6 +29,11 @@ class LoginActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        binding.forgotpass.setOnClickListener {
+            val intent = Intent(this, ForgetActivity::class.java)
+            startActivity(intent)
+        }
+
     }
 
     fun loginWithFirebase(userEmail: String, password: String) {

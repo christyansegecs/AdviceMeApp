@@ -3,7 +3,6 @@ package com.chris.adviceapp.view
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
-import com.chris.adviceapp.databinding.ActivityLoginBinding
 import com.chris.adviceapp.databinding.ActivitySignUpBinding
 import com.google.firebase.auth.FirebaseAuth
 
