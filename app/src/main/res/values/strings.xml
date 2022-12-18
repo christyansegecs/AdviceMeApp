@@ -3,4 +3,13 @@
     <string name="saved_list">saved list</string>
     <string name="save_this_advice">Save this advice</string>
     <string name="next_one">next one</string>
+    <string name="email_hint">Enter Your E-mail Adress</string>
+    <string name="reset_password">reset my password</string>
+    <string name="hint_password">Password</string>
+    <string name="forgot_password">Forgot password?</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="or_sign_in_with">or sign in with</string>
+    <string name="hint_user_email">User Email</string>
+    <string name="password">Password</string>
+    <string name="login">LOGIN</string>
 </resources>
