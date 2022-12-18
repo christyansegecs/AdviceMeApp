@@ -44,4 +44,14 @@ class LoginActivity : AppCompatActivity() {
                 }
             }
     }
+
+    override fun onStart() {
+        super.onStart()
+        val user = auth.currentUser
+        if (user != null) {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+    }
 }
