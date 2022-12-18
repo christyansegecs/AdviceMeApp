@@ -63,7 +63,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun handleAdvices() = lifecycleScope.launchWhenCreated{
+    private fun handleAdvices() = lifecycleScope.launchWhenCreated{
         viewModel._adviceStateFlow.collect {
             when(it) {
                 is AdviceState.onLoading -> { binding.progressBar.isVisible=true }
@@ -72,7 +72,7 @@ class MainActivity : AppCompatActivity() {
                     binding.progressBar.isVisible = false }
                 is AdviceState.onSuccess -> {
                     it.data.body()?.slip?.advice
-                    binding.tvAdvice.setText(it.data.body()?.slip?.advice)
+                    binding.tvAdvice.text = it.data.body()?.slip?.advice
                     currentAdvice = it.data.body()?.slip?.advice.toString()
                     binding.progressBar.isVisible=false
                     }
@@ -110,13 +110,13 @@ class MainActivity : AppCompatActivity() {
         val dialog = AlertDialog.Builder(this)
             .setTitle("Logout?")
             .setMessage("Do you want to sign out?")
-            .setPositiveButton("Yes") { dialogInterface, i ->
+            .setPositiveButton("Yes") { _, _ ->
                 FirebaseAuth.getInstance().signOut()
                 val intent = Intent(this@MainActivity, LoginActivity::class.java)
                 startActivity(intent)
                 finish()
             }
-            .setNegativeButton("No") { dialogInterface, i ->
+            .setNegativeButton("No") { _, _ ->
             }.create()
         dialog.show()
     }

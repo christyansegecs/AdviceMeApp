@@ -10,7 +10,7 @@ import com.google.firebase.auth.FirebaseAuth
 
 class LoginActivity : AppCompatActivity() {
 
-    val auth: FirebaseAuth = FirebaseAuth.getInstance()
+    private val auth: FirebaseAuth = FirebaseAuth.getInstance()
     private lateinit var binding: ActivityLoginBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,7 +39,7 @@ class LoginActivity : AppCompatActivity() {
 
     }
 
-    fun loginWithFirebase(userEmail: String, password: String) {
+    private fun loginWithFirebase(userEmail: String, password: String) {
         auth.signInWithEmailAndPassword(userEmail, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {

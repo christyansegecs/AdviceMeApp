@@ -14,7 +14,7 @@
         android:gravity="center"
         android:text="@string/login"
         android:textColor="@color/white"
-        android:textSize="35dp"
+        android:textSize="35sp"
         android:textStyle="bold" />
 
     <EditText
@@ -27,7 +27,7 @@
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="10dp"
         android:background="#30ffffff"
-        android:drawableLeft="@drawable/ic_person_auth"
+        android:drawableStart="@drawable/ic_person_auth"
         android:drawablePadding="20dp"
         android:hint="@string/hint_user_email"
         android:padding="20dp"
@@ -45,7 +45,7 @@
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="10dp"
         android:background="#30ffffff"
-        android:drawableLeft="@drawable/ic_info"
+        android:drawableStart="@drawable/ic_info"
         android:drawablePadding="20dp"
         android:hint="@string/hint_password"
         android:inputType="textPassword"
@@ -53,7 +53,7 @@
         android:textColor="@color/white"
         android:textColorHint="@color/white" />
 
-    <com.google.android.material.button.MaterialButton
+    <Button
         android:id="@+id/btnLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -79,7 +79,7 @@
         android:text="@string/forgot_password"
         android:textColor="@color/white" />
 
-    <com.google.android.material.button.MaterialButton
+    <Button
         android:id="@+id/btnSignUp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

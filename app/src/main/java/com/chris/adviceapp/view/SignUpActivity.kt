@@ -8,7 +8,7 @@ import com.google.firebase.auth.FirebaseAuth
 
 class SignUpActivity : AppCompatActivity() {
 
-    val auth: FirebaseAuth = FirebaseAuth.getInstance()
+    private val auth: FirebaseAuth = FirebaseAuth.getInstance()
     private lateinit var binding: ActivitySignUpBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,7 +25,7 @@ class SignUpActivity : AppCompatActivity() {
 
     }
 
-    fun signUpWithFirebase(userEmail: String, password: String) {
+    private fun signUpWithFirebase(userEmail: String, password: String) {
         auth.createUserWithEmailAndPassword(userEmail, password).
         addOnCompleteListener { task ->
             if (task.isSuccessful) {

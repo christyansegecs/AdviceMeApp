@@ -1,5 +1,6 @@
 package com.chris.adviceapp.view
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -9,7 +10,7 @@ import com.google.firebase.auth.FirebaseAuth
 class ForgetActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityForgetBinding
-    val auth: FirebaseAuth = FirebaseAuth.getInstance()
+    private val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,11 +24,16 @@ class ForgetActivity : AppCompatActivity() {
                 task ->
                 if (task.isSuccessful) {
                     Toast.makeText(applicationContext,
-                    "We sent a password reset email for your email adress",
+                    "We sent a password reset email for your email address",
                     Toast.LENGTH_SHORT).show()
                     finish()
                 }
             }
+        }
+
+        binding.btnPhone.setOnClickListener {
+            val intent = Intent(this, PhoneActivity::class.java)
+            startActivity(intent)
         }
     }
 }

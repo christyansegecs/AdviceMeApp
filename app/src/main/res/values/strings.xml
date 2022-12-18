@@ -12,4 +12,7 @@
     <string name="hint_user_email">User Email</string>
     <string name="password">Password</string>
     <string name="login">LOGIN</string>
+    <string name="auth_phone_number">Auth through Phone Number</string>
+    <string name="send_sms_code">send sms code</string>
+    <string name="verify_to_sign_in">verify to sign in</string>
 </resources>
