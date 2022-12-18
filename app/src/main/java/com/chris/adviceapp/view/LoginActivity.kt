@@ -15,7 +15,6 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         installSplashScreen()
 
         this.binding = ActivityLoginBinding.inflate(layoutInflater)
@@ -34,6 +33,11 @@ class LoginActivity : AppCompatActivity() {
 
         binding.forgotpass.setOnClickListener {
             val intent = Intent(this, ForgetActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.btnPhone.setOnClickListener {
+            val intent = Intent(this, PhoneActivity::class.java)
             startActivity(intent)
         }
 

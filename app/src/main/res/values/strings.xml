@@ -15,4 +15,6 @@
     <string name="auth_phone_number">Auth through Phone Number</string>
     <string name="send_sms_code">send sms code</string>
     <string name="verify_to_sign_in">verify to sign in</string>
+    <string name="enter_your_phone_number">Enter Phone Number</string>
+    <string name="enter_verification_code">Enter Verification Code</string>
 </resources>

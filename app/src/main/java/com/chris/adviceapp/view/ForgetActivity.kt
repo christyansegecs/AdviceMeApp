@@ -1,6 +1,5 @@
 package com.chris.adviceapp.view
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -29,11 +28,6 @@ class ForgetActivity : AppCompatActivity() {
                     finish()
                 }
             }
-        }
-
-        binding.btnPhone.setOnClickListener {
-            val intent = Intent(this, PhoneActivity::class.java)
-            startActivity(intent)
         }
     }
 }
