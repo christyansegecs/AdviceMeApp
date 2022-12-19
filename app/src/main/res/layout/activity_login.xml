@@ -71,12 +71,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvPassword" />
 
-    <TextView
-        android:id="@+id/tvForgotPassword"
+    <Button
+        android:id="@+id/btnForget"
         android:layout_width="wrap_content"
-        android:layout_height="20dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/design_default_color_secondary"
         android:text="@string/forgot_password"
-        android:textColor="@color/white"
         app:layout_constraintBottom_toTopOf="@+id/btnPhone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
