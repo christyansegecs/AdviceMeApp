@@ -27,8 +27,8 @@ class LoginActivity : AppCompatActivity() {
         setContentView(this.binding.root)
 
         binding.btnLogin.setOnClickListener {
-            val userEmail = binding.userEmail.text.toString()
-            val password = binding.password.text.toString()
+            val userEmail = binding.tvEmail.text.toString()
+            val password = binding.tvPassword.text.toString()
             loginWithFirebase(userEmail, password)
         }
 
@@ -37,7 +37,7 @@ class LoginActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        binding.forgotpass.setOnClickListener {
+        binding.tvForgotPassword.setOnClickListener {
             val intent = Intent(this, ForgetActivity::class.java)
             startActivity(intent)
         }
