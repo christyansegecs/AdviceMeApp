@@ -3,7 +3,7 @@
     <string name="saved_list">saved list</string>
     <string name="save_this_advice">Save this advice</string>
     <string name="next_one">next one</string>
-    <string name="email_hint">Enter Your E-mail Adress</string>
+    <string name="email_hint">Enter Your E-mail Address</string>
     <string name="reset_password">reset my password</string>
     <string name="hint_password">Password</string>
     <string name="forgot_password">Forgot password?</string>
@@ -17,4 +17,7 @@
     <string name="verify_to_sign_in">verify to sign in</string>
     <string name="enter_your_phone_number">Enter Phone Number</string>
     <string name="enter_verification_code">Enter Verification Code</string>
+    <string name="login_with_a_google_account">Login with a Google account</string>
+    <string name="login_with_a_facebook_account">Login with a Facebook account</string>
+    <string name="login_with_a_twitter_account">Login with a Twitter account</string>
 </resources>

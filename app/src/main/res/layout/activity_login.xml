@@ -124,7 +124,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btnFacebook"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:contentDescription="@string/login_with_a_google_account" />
 
     <ImageView
         android:id="@+id/btnFacebook"
@@ -135,7 +136,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btnTwitter"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/btnGoogle" />
+        app:layout_constraintStart_toEndOf="@+id/btnGoogle"
+        android:contentDescription="@string/login_with_a_facebook_account" />
 
     <ImageView
         android:id="@+id/btnTwitter"
@@ -146,6 +148,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/btnFacebook" />
+        app:layout_constraintStart_toEndOf="@+id/btnFacebook"
+        android:contentDescription="@string/login_with_a_twitter_account" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

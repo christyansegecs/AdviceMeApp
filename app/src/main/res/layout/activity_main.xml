@@ -35,11 +35,12 @@
         android:id="@+id/imageView"
         android:layout_width="160dp"
         android:layout_height="198dp"
+        app:srcCompat="@drawable/calvin"
+        android:importantForAccessibility="no"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="20dp"
         app:layout_constraintBottom_toTopOf="@+id/btnNewAdvice"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/calvin" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <Button
         android:id="@+id/btnNewAdvice"
@@ -68,6 +69,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
