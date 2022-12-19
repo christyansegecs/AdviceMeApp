@@ -121,16 +121,19 @@
         android:gravity="center">
 
         <ImageView
+            android:id="@+id/btnGoogle"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_margin="20dp"
             android:src="@drawable/google"/>
         <ImageView
+            android:id="@+id/btnFacebook"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_margin="20dp"
             android:src="@drawable/facebook"/>
         <ImageView
+            android:id="@+id/btnTwitter"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_margin="20dp"
