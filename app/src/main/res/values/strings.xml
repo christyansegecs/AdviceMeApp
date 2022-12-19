@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">AdviceApp</string>
+    <string name="app_name" translatable="false">AdviceApp</string>
     <string name="saved_list">saved list</string>
     <string name="save_this_advice">Save this advice</string>
     <string name="next_one">next one</string>
@@ -11,7 +11,7 @@
     <string name="or_sign_in_with">or sign in with</string>
     <string name="hint_user_email">User Email</string>
     <string name="password">Password</string>
-    <string name="login">LOGIN</string>
+    <string name="login" translatable="false">LOGIN</string>
     <string name="auth_phone_number">Auth through Phone Number</string>
     <string name="send_sms_code">send sms code</string>
     <string name="verify_to_sign_in">verify to sign in</string>

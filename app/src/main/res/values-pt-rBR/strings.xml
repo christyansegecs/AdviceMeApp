@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="saved_list">lista salva</string>
+    <string name="next_one">próximo</string>
+    <string name="email_hint">Digite seu E-mail</string>
+    <string name="reset_password">resetar minha senha</string>
+    <string name="hint_password">Senha</string>
+    <string name="forgot_password">Esqueceu sua senha?</string>
+    <string name="sign_up">Criar uma Conta</string>
+    <string name="or_sign_in_with">ou faça o login com</string>
+    <string name="hint_user_email">email</string>
+    <string name="password">senha</string>
+    <string name="auth_phone_number">Autenticação por Telefone</string>
+    <string name="send_sms_code">enviar sms</string>
+    <string name="verify_to_sign_in">verificar para cadastrar</string>
+    <string name="enter_your_phone_number">Digite seu Telefone</string>
+    <string name="enter_verification_code">Digite o Código de Verificação</string>
+    <string name="login_with_a_google_account">Logar com o Google</string>
+    <string name="login_with_a_facebook_account">Logar com o Facebook</string>
+    <string name="login_with_a_twitter_account">Logar com o Twitter</string>
+    <string name="save_this_advice">Salvar esse conselho</string>
+</resources>
