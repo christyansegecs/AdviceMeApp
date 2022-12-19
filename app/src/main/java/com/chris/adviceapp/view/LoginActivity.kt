@@ -122,12 +122,6 @@ class LoginActivity : AppCompatActivity() {
                     Toast.LENGTH_LONG
                 ).show()
             }
-            finally {
-                Toast.makeText(
-                    applicationContext, "Erro ao efetuar login, nenhum usuário Google cadastrado no dispositivo",
-                    Toast.LENGTH_LONG
-                ).show()
-            }
         }
     }
 }
