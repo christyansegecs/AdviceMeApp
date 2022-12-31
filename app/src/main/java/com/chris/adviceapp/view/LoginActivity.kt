@@ -36,7 +36,7 @@ class LoginActivity : AppCompatActivity() {
         registerActivityForGoogleSignIn()
     }
 
-    private fun loginWithFirebase(userEmail: String, password: String) {
+    private fun loginWithEmailAndPassword(userEmail: String, password: String) {
         val auth : FirebaseAuth = FirebaseAuth.getInstance()
         auth.signInWithEmailAndPassword(userEmail, password)
             .addOnCompleteListener(this) { task ->
@@ -118,7 +118,7 @@ class LoginActivity : AppCompatActivity() {
         binding.btnLogin.setOnClickListener {
             val userEmail = binding.tvEmail.text.toString()
             val password = binding.tvPassword.text.toString()
-            loginWithFirebase(userEmail, password)
+            loginWithEmailAndPassword(userEmail, password)
         }
 
         binding.btnSignUp.setOnClickListener {
@@ -138,6 +138,10 @@ class LoginActivity : AppCompatActivity() {
 
         binding.btnGoogle.setOnClickListener{
             signInGoogle()
+        }
+
+        binding.btnFacebook.setOnClickListener {
+
         }
     }
 
