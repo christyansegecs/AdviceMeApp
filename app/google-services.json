@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "810371366875",
+    "project_id": "advice-3aed2",
+    "storage_bucket": "advice-3aed2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:810371366875:android:104358269820ef343a71fe",
+        "android_client_info": {
+          "package_name": "com.chris.adviceapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "810371366875-9uk59tmk87gfj4l6qddtjosemnt5sh22.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.chris.adviceapp",
+            "certificate_hash": "3280b8426281286f9e93d4109c1d718e1de20af5"
+          }
+        },
+        {
+          "client_id": "810371366875-ruatceu4ca7sn3v16h08j6rr0iia7gvt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBRYQDM0nBE-W23PTkiQcw4HGBLJwFpLgc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "810371366875-ruatceu4ca7sn3v16h08j6rr0iia7gvt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

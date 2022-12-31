@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.MenuProvider
@@ -23,6 +24,8 @@ import com.chris.adviceapp.viewmodel.AdviceDatabaseViewModel
 import com.chris.adviceapp.viewmodel.AdviceDatabaseViewModelFactory
 import com.chris.adviceapp.viewmodel.AdviceViewModel
 import com.chris.adviceapp.viewmodel.AdviceViewModelFactory
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : AppCompatActivity() {
@@ -111,7 +114,20 @@ class MainActivity : AppCompatActivity() {
             .setTitle("Logout?")
             .setMessage("Do you want to sign out?")
             .setPositiveButton("Yes") { _, _ ->
+
+                // sign ou for email and password
                 FirebaseAuth.getInstance().signOut()
+
+                //  sign out for google account
+                val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestEmail().build()
+                val googleSignInClient = GoogleSignIn.getClient(this, gso)
+                googleSignInClient.signOut().addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        Toast.makeText(applicationContext, "Sign out is successful", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
                 val intent = Intent(this@MainActivity, LoginActivity::class.java)
                 startActivity(intent)
                 finish()
