@@ -6,7 +6,7 @@
     <string name="email_hint">Enter Your E-mail Address</string>
     <string name="reset_password">reset my password</string>
     <string name="hint_password">Password</string>
-    <string name="forgot_password">Forgot password?</string>
+    <string name="forgot_password"><u>Forgot password?</u></string>
     <string name="sign_up">Create an Account</string>
     <string name="or_sign_in_with">or sign in with</string>
     <string name="hint_user_email">User Email</string>
