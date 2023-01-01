@@ -5,7 +5,7 @@
     <string name="email_hint">Digite seu E-mail</string>
     <string name="reset_password">resetar minha senha</string>
     <string name="hint_password">Senha</string>
-    <string name="forgot_password">Esqueceu sua senha?</string>
+    <string name="forgot_password"><u>Esqueceu sua senha?</u></string>
     <string name="sign_up">Criar uma Conta</string>
     <string name="or_sign_in_with">ou faça o login com</string>
     <string name="hint_user_email">email</string>

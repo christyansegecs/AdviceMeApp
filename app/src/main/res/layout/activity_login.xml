@@ -12,11 +12,11 @@
         android:id="@+id/tvLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:text="@string/login"
         android:textColor="@color/white"
         android:textSize="35sp"
         android:textStyle="bold"
-        android:layout_marginTop="30dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -25,17 +25,17 @@
         android:id="@+id/tvEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
         android:background="@drawable/rounded_stroke"
         android:drawableStart="@drawable/ic_person_auth"
         android:drawablePadding="20dp"
         android:hint="@string/hint_user_email"
         android:inputType="textEmailAddress"
+        android:padding="20dp"
         android:textColor="@color/white"
         android:textColorHint="@color/white"
-        android:padding="20dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="20dp"
         app:layout_constraintBottom_toTopOf="@+id/tvPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -65,8 +65,8 @@
         android:id="@+id/icRedEye"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_remove_red_eye"
         android:padding="15dp"
+        android:src="@drawable/ic_remove_red_eye"
         app:layout_constraintBottom_toBottomOf="@+id/tvPassword"
         app:layout_constraintEnd_toEndOf="@+id/tvPassword"
         app:layout_constraintTop_toTopOf="@+id/tvPassword"
@@ -76,53 +76,52 @@
         android:id="@+id/btnLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/login"
-        android:backgroundTint="@color/design_default_color_secondary"
         android:layout_marginTop="20dp"
+        android:backgroundTint="@color/design_default_color_secondary"
+        android:text="@string/login"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvPassword" />
 
-    <Button
+    <TextView
         android:id="@+id/btnForget"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/design_default_color_secondary"
+        android:clickable="true"
+        android:focusable="true"
+        android:padding="20dp"
         android:text="@string/forgot_password"
-        app:layout_constraintBottom_toTopOf="@+id/btnPhone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnLogin" />
-
-
-    <Button
-        android:id="@+id/btnPhone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/auth_phone_number"
-        android:backgroundTint="@color/design_default_color_secondary"
-        android:layout_marginBottom="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/btnSignUp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/btnSignUp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/sign_up"
         android:backgroundTint="@color/design_default_color_secondary"
-        android:layout_marginBottom="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/tvOtherOptions"
+        android:text="@string/sign_up"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnForget" />
+
+    <Button
+        android:id="@+id/btnPhone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/design_default_color_secondary"
+        android:text="@string/auth_phone_number"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnSignUp" />
 
     <TextView
         android:id="@+id/tvOtherOptions"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/or_sign_in_with"
         android:layout_marginBottom="20dp"
+        android:text="@string/or_sign_in_with"
         app:layout_constraintBottom_toTopOf="@+id/btnFacebook"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -131,36 +130,36 @@
         android:id="@+id/btnGoogle"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:src="@drawable/google"
         android:layout_marginBottom="40dp"
+        android:contentDescription="@string/login_with_a_google_account"
+        android:src="@drawable/google"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btnFacebook"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        android:contentDescription="@string/login_with_a_google_account" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
         android:id="@+id/btnFacebook"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:src="@drawable/facebook"
         android:layout_marginBottom="40dp"
+        android:contentDescription="@string/login_with_a_facebook_account"
+        android:src="@drawable/facebook"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btnTwitter"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/btnGoogle"
-        android:contentDescription="@string/login_with_a_facebook_account" />
+        app:layout_constraintStart_toEndOf="@+id/btnGoogle" />
 
     <ImageView
         android:id="@+id/btnTwitter"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:src="@drawable/twitter"
         android:layout_marginBottom="40dp"
+        android:contentDescription="@string/login_with_a_twitter_account"
+        android:src="@drawable/twitter"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/btnFacebook"
-        android:contentDescription="@string/login_with_a_twitter_account" />
+        app:layout_constraintStart_toEndOf="@+id/btnFacebook" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
