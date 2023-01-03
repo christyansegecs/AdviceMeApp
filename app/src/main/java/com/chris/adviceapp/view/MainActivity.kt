@@ -24,6 +24,7 @@ import com.chris.adviceapp.viewmodel.AdviceDatabaseViewModel
 import com.chris.adviceapp.viewmodel.AdviceDatabaseViewModelFactory
 import com.chris.adviceapp.viewmodel.AdviceViewModel
 import com.chris.adviceapp.viewmodel.AdviceViewModelFactory
+import com.facebook.login.LoginManager
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
@@ -117,6 +118,9 @@ class MainActivity : AppCompatActivity() {
 
                 // sign ou for email and password
                 FirebaseAuth.getInstance().signOut()
+
+                // sign ou for facebook
+                LoginManager.getInstance().logOut()
 
                 //  sign out for google account
                 val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)

@@ -2,6 +2,9 @@ package com.chris.adviceapp.view
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.method.HideReturnsTransformationMethod
+import android.text.method.PasswordTransformationMethod
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.ActivityResultLauncher
@@ -10,20 +13,30 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.chris.adviceapp.R
 import com.chris.adviceapp.databinding.ActivityLoginBinding
+import com.facebook.AccessToken
+import com.facebook.CallbackManager
+import com.facebook.FacebookCallback
+import com.facebook.FacebookException
+import com.facebook.login.LoginManager
+import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.AuthCredential
+import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import java.util.Arrays
 
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
     private lateinit var googleSignInClient: GoogleSignInClient
     private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
+    private var callbackManager: CallbackManager? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,11 +70,11 @@ class LoginActivity : AppCompatActivity() {
             .requestIdToken(getString(R.string.default_web_client_id))
             .requestEmail()
             .build()
-        googleSignInClient = GoogleSignIn.getClient(this,gso)
+        googleSignInClient = GoogleSignIn.getClient(this, gso)
         signIn()
     }
 
-    fun signIn () {
+    fun signIn() {
         val signInIntent: Intent = googleSignInClient.signInIntent
         activityResultLauncher.launch(signInIntent)
     }
@@ -86,13 +99,13 @@ class LoginActivity : AppCompatActivity() {
 
     private fun firebaseSignInWithGoogle(task: Task<GoogleSignInAccount>) {
         try {
-            val account : GoogleSignInAccount = task.getResult(ApiException::class.java)
+            val account: GoogleSignInAccount = task.getResult(ApiException::class.java)
             Toast.makeText(applicationContext, "Welcome", Toast.LENGTH_LONG).show()
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
             firebaseGoogleAccount(account)
             finish()
-        } catch (e : ApiException) {
+        } catch (e: ApiException) {
             Toast.makeText(applicationContext, e.localizedMessage, Toast.LENGTH_LONG).show()
         }
     }
@@ -100,15 +113,58 @@ class LoginActivity : AppCompatActivity() {
     private fun firebaseGoogleAccount(account: GoogleSignInAccount) {
         val auth : FirebaseAuth = FirebaseAuth.getInstance()
         val authCredential = GoogleAuthProvider.getCredential(account.idToken, null)
-        auth.signInWithCredential(authCredential).addOnCompleteListener(this) {
-                task ->
+        auth.signInWithCredential(authCredential).addOnCompleteListener(this) { task ->
             if (task.isSuccessful) {
                 val user = auth.currentUser
             } else {
                 Toast.makeText(
-                    applicationContext, "Login error",
+                    applicationContext, "Login Google error",
                     Toast.LENGTH_LONG
                 ).show()
+            }
+        }
+    }
+
+    private fun loginWithFacebook() {
+        callbackManager = CallbackManager.Factory.create()
+        LoginManager.getInstance()
+            .logInWithReadPermissions(this, Arrays.asList("public_profile", "email"))
+        LoginManager.getInstance().registerCallback(callbackManager,
+            object : FacebookCallback<LoginResult> {
+                override fun onSuccess(loginResult: LoginResult) {
+                    Log.d("FacebookAuthentication", "Facebook token: " + loginResult.accessToken.token)
+                    handleFacebookAccessToken(loginResult!!.accessToken)
+                    val intent = Intent(applicationContext, MainActivity::class.java)
+                    startActivity(intent)
+                    Toast.makeText(
+                        applicationContext, "Login Facebook successful",
+                        Toast.LENGTH_LONG
+                    ).show()}
+                override fun onCancel() {
+                    Toast.makeText(
+                        applicationContext, "Login Facebook Canceled",
+                        Toast.LENGTH_LONG
+                    ).show()}
+                override fun onError(error: FacebookException) {
+                    Toast.makeText(
+                        applicationContext, "Login Facebook error",
+                        Toast.LENGTH_LONG
+                    ).show()}
+            }
+        )
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        callbackManager?.onActivityResult(requestCode, resultCode, data)
+    }
+
+    private fun handleFacebookAccessToken(accessToken: AccessToken?) {
+        val auth : FirebaseAuth = FirebaseAuth.getInstance()
+        val credential: AuthCredential = FacebookAuthProvider.getCredential(accessToken!!.token)
+        auth.signInWithCredential(credential).addOnCompleteListener(this) { task ->
+            if (task.isSuccessful) {
+                val user = auth.currentUser
             }
         }
     }
@@ -136,13 +192,26 @@ class LoginActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        binding.btnGoogle.setOnClickListener{
+        binding.btnGoogle.setOnClickListener {
             signInGoogle()
         }
 
         binding.btnFacebook.setOnClickListener {
+            loginWithFacebook()
+        }
 
+        binding.btnTwitter.setOnClickListener {
+            loginWithTwitter()
+        }
+
+        binding.icRedEye.setOnClickListener{
+            if (binding.tvPassword.getTransformationMethod().equals(HideReturnsTransformationMethod.getInstance())) {
+                binding.tvPassword.setTransformationMethod(PasswordTransformationMethod.getInstance())
+                binding.icRedEye.setImageResource(R.drawable.ic_hide)
+            } else{
+                binding.tvPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance())
+                binding.icRedEye.setImageResource(R.drawable.ic_remove_red_eye)
+            }
         }
     }
-
 }

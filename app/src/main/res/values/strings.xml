@@ -20,4 +20,6 @@
     <string name="login_with_a_google_account">Login with a Google account</string>
     <string name="login_with_a_facebook_account">Login with a Facebook account</string>
     <string name="login_with_a_twitter_account">Login with a Twitter account</string>
+    <string name="facebook_app_id" translatable="false">1182290422675256</string>
+    <string name="fb_client_token" translatable="false">3610c188b0ed8122d62ac87d9e5e9b84</string>
 </resources>
