@@ -6,6 +6,7 @@ plugins {
 }
 
 android {
+    namespace 'com.chris.adviceapp'
     compileSdk 33
 
     defaultConfig {

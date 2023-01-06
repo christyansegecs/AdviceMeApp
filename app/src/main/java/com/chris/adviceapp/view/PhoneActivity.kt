@@ -1,9 +1,10 @@
 package com.chris.adviceapp.view
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.chris.adviceapp.databinding.ActivityPhoneBinding
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
@@ -16,7 +17,7 @@ class PhoneActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPhoneBinding
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
-    private lateinit var mCallbacks : PhoneAuthProvider.OnVerificationStateChangedCallbacks
+    private lateinit var callbacks : PhoneAuthProvider.OnVerificationStateChangedCallbacks
     lateinit var verificationCode : String
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,47 +33,52 @@ class PhoneActivity : AppCompatActivity() {
             val options = PhoneAuthOptions.newBuilder(auth)
                 .setPhoneNumber(userPhoneNumber)
                 .setTimeout(60L, TimeUnit.SECONDS)
-                .setActivity(this@PhoneActivity)
-                .setCallbacks(mCallbacks)
+                .setActivity(this)
+                .setCallbacks(callbacks)
                 .build()
 
             PhoneAuthProvider.verifyPhoneNumber(options)
+            auth.useAppLanguage()
         }
 
         binding.btnSmsVerify.setOnClickListener {
             signInWithSMSCode()
         }
 
-        mCallbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-            override fun onVerificationCompleted(p0: PhoneAuthCredential) {
-                TODO("Not yet implemented")
+        callbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+            override fun onVerificationCompleted(credential: PhoneAuthCredential) {
+                Log.d("PhoneAuth", "onVerificationCompleted:$credential")
+                signInWithPhoneAuthCredential(credential)
             }
 
-            override fun onVerificationFailed(p0: FirebaseException) {
-                TODO("Not yet implemented")
+            override fun onVerificationFailed(e: FirebaseException) {
+                Log.d("PhoneAuth", "onVerificationFailed")
             }
 
-            override fun onCodeSent(p0: String, p1: PhoneAuthProvider.ForceResendingToken) {
-                super.onCodeSent(p0, p1)
-
-                verificationCode = p0
+            override fun onCodeSent(verificationId: String, token: PhoneAuthProvider.ForceResendingToken) {
+                super.onCodeSent(verificationId, token)
+                Log.d("PhoneAuth", "CodeSent:${verificationId}")
+                verificationCode = verificationId
             }
         }
     }
 
     private fun signInWithSMSCode() {
-        val userEnterCode = binding.tvPhoneVerify.text.toString()
-        val credential = PhoneAuthProvider.getCredential(verificationCode, userEnterCode)
+        val code = binding.tvPhoneVerify.text.toString()
+        val credential = PhoneAuthProvider.getCredential(verificationCode, code)
         signInWithPhoneAuthCredential(credential)
     }
 
     private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
-        auth.signInWithCredential(credential).addOnCompleteListener { task ->
+        auth.signInWithCredential(credential)
+            .addOnCompleteListener(this) { task ->
             if (task.isSuccessful) {
-                val intent = Intent(this@PhoneActivity, MainActivity::class.java)
+                val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
+                Log.d("PhoneAuth", "Success: signInWithCredential")
                 finish()
             } else {
+                Log.d("PhoneAuth", "Failed: signInWithCredential. ${task.exception.toString()}")
                 Toast.makeText(applicationContext, "The code you entered is incorrect",
                 Toast.LENGTH_SHORT).show()
             }

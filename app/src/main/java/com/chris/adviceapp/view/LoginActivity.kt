@@ -29,6 +29,7 @@ import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.auth.OAuthProvider
 import java.util.Arrays
 
 class LoginActivity : AppCompatActivity() {
@@ -37,6 +38,8 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var googleSignInClient: GoogleSignInClient
     private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
     private var callbackManager: CallbackManager? = null
+    private val auth : FirebaseAuth = FirebaseAuth.getInstance()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,8 +52,21 @@ class LoginActivity : AppCompatActivity() {
         registerActivityForGoogleSignIn()
     }
 
+    // Remember User Login
+    override fun onStart() {
+        super.onStart()
+
+        val user = auth.currentUser
+        if (user != null) {
+
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            finish()
+
+        }
+    }
+
     private fun loginWithEmailAndPassword(userEmail: String, password: String) {
-        val auth : FirebaseAuth = FirebaseAuth.getInstance()
         auth.signInWithEmailAndPassword(userEmail, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
@@ -74,7 +90,7 @@ class LoginActivity : AppCompatActivity() {
         signIn()
     }
 
-    fun signIn() {
+    private fun signIn() {
         val signInIntent: Intent = googleSignInClient.signInIntent
         activityResultLauncher.launch(signInIntent)
     }
@@ -160,7 +176,6 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun handleFacebookAccessToken(accessToken: AccessToken?) {
-        val auth : FirebaseAuth = FirebaseAuth.getInstance()
         val credential: AuthCredential = FacebookAuthProvider.getCredential(accessToken!!.token)
         auth.signInWithCredential(credential).addOnCompleteListener(this) { task ->
             if (task.isSuccessful) {
@@ -170,20 +185,23 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun loginWithTwitter() {
-        val auth : FirebaseAuth = FirebaseAuth.getInstance()
-        twitterLoginViewModel.signInWithTwitter(this, auth)
-        Log.d("Twitter","método da activity foi chamado")
-    }
-
-    fun twitterResponse() {
-        twitterLoginViewModel.authResponse.observe(this, androidx.lifecycle.Observer {
-            if (it != null) {
+        val provider = OAuthProvider.newBuilder("twitter.com")
+        provider.addCustomParameter("lang", "fr")
+        auth
+            .startActivityForSignInWithProvider(this, provider.build())
+            .addOnSuccessListener { authResult ->
                 Toast.makeText(
-                    this, "authentications is successful",
-                    Toast.LENGTH_LONG
+                    this,
+                    "Success: " + authResult.user!!.displayName,
+                    Toast.LENGTH_SHORT
                 ).show()
+                Log.d("Twitter", "addOnSuccessListener")
+                startActivity(Intent(applicationContext, MainActivity::class.java))
             }
-        })
+            .addOnFailureListener { e ->
+                Toast.makeText(this, "Failed: " + e.message, Toast.LENGTH_SHORT).show()
+                Log.d("Twitter", e.message.toString())
+            }
     }
 
     private fun setButtonClickListener() {
@@ -222,11 +240,11 @@ class LoginActivity : AppCompatActivity() {
         }
 
         binding.icRedEye.setOnClickListener{
-            if (binding.tvPassword.getTransformationMethod().equals(HideReturnsTransformationMethod.getInstance())) {
-                binding.tvPassword.setTransformationMethod(PasswordTransformationMethod.getInstance())
+            if (binding.tvPassword.transformationMethod.equals(HideReturnsTransformationMethod.getInstance())) {
+                binding.tvPassword.transformationMethod = PasswordTransformationMethod.getInstance()
                 binding.icRedEye.setImageResource(R.drawable.ic_hide)
-            } else{
-                binding.tvPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance())
+            } else {
+                binding.tvPassword.transformationMethod = HideReturnsTransformationMethod.getInstance()
                 binding.icRedEye.setImageResource(R.drawable.ic_remove_red_eye)
             }
         }
