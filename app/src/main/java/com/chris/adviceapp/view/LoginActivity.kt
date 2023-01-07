@@ -76,6 +76,11 @@ class LoginActivity : AppCompatActivity() {
                     ).show()
                     val intent = Intent(this, MainActivity::class.java)
                     startActivity(intent)
+                } else {
+                    Toast.makeText(
+                        applicationContext, "Login Failed. If you don't have an account you can create one",
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
             }
     }
@@ -209,7 +214,15 @@ class LoginActivity : AppCompatActivity() {
         binding.btnLogin.setOnClickListener {
             val userEmail = binding.tvEmail.text.toString()
             val password = binding.tvPassword.text.toString()
-            loginWithEmailAndPassword(userEmail, password)
+
+            if (userEmail.isEmpty()) {
+                binding.tvEmail.error = "Input Your Email"
+
+            } else if (password.isEmpty()) {
+                binding.tvPassword.error = "Input Your Password"
+            } else {
+                loginWithEmailAndPassword(userEmail, password)
+            }
         }
 
         binding.btnSignUp.setOnClickListener {
