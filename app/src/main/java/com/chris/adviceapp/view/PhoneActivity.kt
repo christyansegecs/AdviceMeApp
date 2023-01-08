@@ -3,9 +3,9 @@ package com.chris.adviceapp.view
 import android.content.Intent
 import android.os.Bundle
 import android.telephony.PhoneNumberFormattingTextWatcher
-import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.chris.adviceapp.R
 import com.chris.adviceapp.databinding.ActivityPhoneBinding
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
@@ -37,17 +37,20 @@ class PhoneActivity : AppCompatActivity() {
     private fun authenticationSettings() {
         callbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             override fun onVerificationCompleted(credential: PhoneAuthCredential) {
-                Log.d("PhoneAuth", "onVerificationCompleted:$credential")
+                Toast.makeText(applicationContext, getString(R.string.toast_phone_verification_successful) + "\n${credential}",
+                    Toast.LENGTH_LONG).show()
                 signInWithPhoneAuthCredential(credential)
             }
 
             override fun onVerificationFailed(e: FirebaseException) {
-                Log.d("PhoneAuth", "onVerificationFailed")
+                Toast.makeText(applicationContext, getString(R.string.toast_phone_verification_failed),
+                    Toast.LENGTH_LONG).show()
             }
 
             override fun onCodeSent(verificationId: String, token: PhoneAuthProvider.ForceResendingToken) {
                 super.onCodeSent(verificationId, token)
-                Log.d("PhoneAuth", "CodeSent:${verificationId}")
+                Toast.makeText(applicationContext, getString(R.string.toast_phone_code_sent) + "\n${verificationId}",
+                    Toast.LENGTH_LONG).show()
                 verificationCode = verificationId
             }
         }
@@ -78,11 +81,9 @@ class PhoneActivity : AppCompatActivity() {
             if (task.isSuccessful) {
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
-                Log.d("PhoneAuth", "Success: signInWithCredential")
                 finish()
             } else {
-                Log.d("PhoneAuth", "Failed: signInWithCredential. ${task.exception.toString()}")
-                Toast.makeText(applicationContext, "The code you entered is incorrect",
+                Toast.makeText(applicationContext, getString(R.string.toast_code_failed) + "\n${task.exception.toString()}",
                 Toast.LENGTH_SHORT).show()
             }
         }
@@ -95,7 +96,7 @@ class PhoneActivity : AppCompatActivity() {
             val userPhoneNumber = binding.tvPhone.text.toString()
 
             if (userPhoneNumber.isEmpty()) {
-                binding.tvPhone.error = "Input Your Phone Number"
+                binding.tvPhone.error = getString(R.string.error_input_phonenumber)
                 binding.tvPhone.requestFocus()
             } else {
                 sendCodeToPhoneNumber(BrazilPrefixPhoneNumber + userPhoneNumber)
@@ -107,7 +108,7 @@ class PhoneActivity : AppCompatActivity() {
             val code = binding.tvPhoneVerify.text.toString()
 
             if (code.isEmpty()) {
-                binding.tvPhoneVerify.error = "Input the code you've received"
+                binding.tvPhoneVerify.error = getString(R.string.error_input_phonenumber)
                 binding.tvPhoneVerify.requestFocus()
             } else {
                 signInWithSMSCode(code)

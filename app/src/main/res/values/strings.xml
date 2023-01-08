@@ -20,4 +20,32 @@
     <string name="login_with_a_google_account">Login with a Google account</string>
     <string name="login_with_a_facebook_account">Login with a Facebook account</string>
     <string name="login_with_a_twitter_account">Login with a Twitter account</string>
+    <string name="error_input_email">Input your email</string>
+    <string name="toast_sent_password">We sent a password reset email for your email address</string>
+    <string name="login_successful">Login is successful</string>
+    <string name="login_failed">Login Failed. If you do not have an account you can create one</string>
+    <string name="login_google_successful">Login successful. Welcome!</string>
+    <string name="login_google_failed">Something went wrong</string>
+    <string name="login_facebook_successful">Login Facebook successful</string>
+    <string name="login_facebook_failed">Login Facebook error</string>
+    <string name="login_facebook_canceled">Login Facebook Canceled</string>
+    <string name="login_twitter_successful">Success: </string>
+    <string name="login_twitter_failed">Failed: </string>
+    <string name="error_input_your_email">Input Your Email</string>
+    <string name="error_input_your_password">Input Your Password</string>
+    <string name="error_handling_advices">Error. Please try again</string>
+    <string name="alert_dialog_logout" translatable="false">Logout?</string>
+    <string name="alert_dialog_logout_successful">Sign out is successful</string>
+    <string name="alert_dialog_logout_positive">Yes</string>
+    <string name="alert_dialog_logout_negative">No</string>
+    <string name="alert_dialog_logout_question">Do you want to sign out?</string>
+    <string name="error_input_phonenumber">Input Your Phone Number</string>
+    <string name="error_input_codereceived">Input the code you have received</string>
+    <string name="toast_code_failed">The code you entered is incorrect</string>
+    <string name="toast_phone_verification_successful">"PhoneAuth: "</string>
+    <string name="toast_phone_verification_failed">Verification Failed</string>
+    <string name="toast_phone_code_sent">"CodeSent: "</string>
+    <string name="signup_successful">Your account has been created</string>
+    <string name="error_input_an_email">Input an Email</string>
+    <string name="error_input_an_password">Input a Password</string>
 </resources>

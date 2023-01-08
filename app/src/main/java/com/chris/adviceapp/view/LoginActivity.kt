@@ -40,7 +40,6 @@ class LoginActivity : AppCompatActivity() {
     private var callbackManager: CallbackManager? = null
     private val auth : FirebaseAuth = FirebaseAuth.getInstance()
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         installSplashScreen()
@@ -71,14 +70,14 @@ class LoginActivity : AppCompatActivity() {
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     Toast.makeText(
-                        applicationContext, "Login is successful",
+                        applicationContext, getString(R.string.login_successful),
                         Toast.LENGTH_LONG
                     ).show()
                     val intent = Intent(this, MainActivity::class.java)
                     startActivity(intent)
                 } else {
                     Toast.makeText(
-                        applicationContext, "Login Failed. If you don't have an account you can create one",
+                        applicationContext, getString(R.string.login_failed),
                         Toast.LENGTH_LONG
                     ).show()
                 }
@@ -112,7 +111,7 @@ class LoginActivity : AppCompatActivity() {
                         GoogleSignIn.getSignedInAccountFromIntent(data)
                     firebaseSignInWithGoogle(task)
                 } else {
-                    Toast.makeText(applicationContext, "Something went wrong", Toast.LENGTH_LONG).show()
+                    Toast.makeText(applicationContext, getString(R.string.login_google_failed), Toast.LENGTH_LONG).show()
                 }
             }
         )
@@ -121,7 +120,7 @@ class LoginActivity : AppCompatActivity() {
     private fun firebaseSignInWithGoogle(task: Task<GoogleSignInAccount>) {
         try {
             val account: GoogleSignInAccount = task.getResult(ApiException::class.java)
-            Toast.makeText(applicationContext, "Welcome", Toast.LENGTH_LONG).show()
+            Toast.makeText(applicationContext, getString(R.string.login_google_successful), Toast.LENGTH_LONG).show()
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
             firebaseGoogleAccount(account)
@@ -139,7 +138,7 @@ class LoginActivity : AppCompatActivity() {
                 val user = auth.currentUser
             } else {
                 Toast.makeText(
-                    applicationContext, "Login Google error",
+                    applicationContext, getString(R.string.login_google_failed),
                     Toast.LENGTH_LONG
                 ).show()
             }
@@ -158,17 +157,17 @@ class LoginActivity : AppCompatActivity() {
                     val intent = Intent(applicationContext, MainActivity::class.java)
                     startActivity(intent)
                     Toast.makeText(
-                        applicationContext, "Login Facebook successful",
+                        applicationContext, getString(R.string.login_facebook_successful),
                         Toast.LENGTH_LONG
                     ).show()}
                 override fun onCancel() {
                     Toast.makeText(
-                        applicationContext, "Login Facebook Canceled",
+                        applicationContext, getString(R.string.login_facebook_canceled),
                         Toast.LENGTH_LONG
                     ).show()}
                 override fun onError(error: FacebookException) {
                     Toast.makeText(
-                        applicationContext, "Login Facebook error",
+                        applicationContext, getString(R.string.login_facebook_failed),
                         Toast.LENGTH_LONG
                     ).show()}
             }
@@ -197,14 +196,14 @@ class LoginActivity : AppCompatActivity() {
             .addOnSuccessListener { authResult ->
                 Toast.makeText(
                     this,
-                    "Success: " + authResult.user!!.displayName,
+                    getString(R.string.login_twitter_successful)+ authResult.user!!.displayName,
                     Toast.LENGTH_SHORT
                 ).show()
                 Log.d("Twitter", "addOnSuccessListener")
                 startActivity(Intent(applicationContext, MainActivity::class.java))
             }
             .addOnFailureListener { e ->
-                Toast.makeText(this, "Failed: " + e.message, Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.login_twitter_failed) + e.message, Toast.LENGTH_SHORT).show()
                 Log.d("Twitter", e.message.toString())
             }
     }
@@ -217,10 +216,10 @@ class LoginActivity : AppCompatActivity() {
             val password = binding.tvPassword.text.toString()
 
             if (userEmail.isEmpty()) {
-                binding.tvEmail.error = "Input Your Email"
+                binding.tvEmail.error = getString(R.string.error_input_your_email)
                 binding.tvEmail.requestFocus()
             } else if (password.isEmpty()) {
-                binding.tvPassword.error = "Input Your Password"
+                binding.tvPassword.error = getString(R.string.error_input_your_password)
                 binding.tvPassword.requestFocus()
             } else {
                 loginWithEmailAndPassword(userEmail, password)

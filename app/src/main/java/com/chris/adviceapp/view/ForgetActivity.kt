@@ -3,6 +3,7 @@ package com.chris.adviceapp.view
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import com.chris.adviceapp.R
 import com.chris.adviceapp.databinding.ActivityForgetBinding
 import com.google.firebase.auth.FirebaseAuth
 
@@ -21,14 +22,14 @@ class ForgetActivity : AppCompatActivity() {
             val email = binding.tvForget.text.toString()
 
             if (email.isEmpty()) {
-                binding.tvForget.error = "Input your email"
+                binding.tvForget.error = getString(R.string.error_input_email)
                 binding.tvForget.requestFocus()
             } else {
                 auth.sendPasswordResetEmail(email).addOnCompleteListener {
                         task ->
                     if (task.isSuccessful) {
                         Toast.makeText(applicationContext,
-                            "We sent a password reset email for your email address",
+                            getString(R.string.toast_sent_password),
                             Toast.LENGTH_SHORT).show()
                         finish()
                     }

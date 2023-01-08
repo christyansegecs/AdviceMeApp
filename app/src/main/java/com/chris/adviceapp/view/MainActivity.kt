@@ -72,7 +72,7 @@ class MainActivity : AppCompatActivity() {
             when(it) {
                 is AdviceState.onLoading -> { binding.progressBar.isVisible=true }
                 is AdviceState.onError -> {
-                    AdviceState.onError(error("Error. Please try again"))
+                    AdviceState.onError(error(getString(R.string.error_handling_advices)))
                     binding.progressBar.isVisible = false }
                 is AdviceState.onSuccess -> {
                     it.data.body()?.slip?.advice
@@ -112,9 +112,9 @@ class MainActivity : AppCompatActivity() {
     private fun showDialog() {
 
         val dialog = AlertDialog.Builder(this)
-            .setTitle("Logout?")
-            .setMessage("Do you want to sign out?")
-            .setPositiveButton("Yes") { _, _ ->
+            .setTitle(getString(R.string.alert_dialog_logout))
+            .setMessage(getString(R.string.alert_dialog_logout_question))
+            .setPositiveButton(getString(R.string.alert_dialog_logout_positive)) { _, _ ->
 
                 // sign ou for email and password
                 FirebaseAuth.getInstance().signOut()
@@ -128,7 +128,7 @@ class MainActivity : AppCompatActivity() {
                 val googleSignInClient = GoogleSignIn.getClient(this, gso)
                 googleSignInClient.signOut().addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        Toast.makeText(applicationContext, "Sign out is successful", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(applicationContext, getString(R.string.alert_dialog_logout_successful), Toast.LENGTH_SHORT).show()
                     }
                 }
 
@@ -136,7 +136,7 @@ class MainActivity : AppCompatActivity() {
                 startActivity(intent)
                 finish()
             }
-            .setNegativeButton("No") { _, _ ->
+            .setNegativeButton(getString(R.string.alert_dialog_logout_negative)) { _, _ ->
             }.create()
         dialog.show()
     }
