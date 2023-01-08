@@ -212,6 +212,7 @@ class LoginActivity : AppCompatActivity() {
     private fun setButtonClickListener() {
 
         binding.btnLogin.setOnClickListener {
+
             val userEmail = binding.tvEmail.text.toString()
             val password = binding.tvPassword.text.toString()
 

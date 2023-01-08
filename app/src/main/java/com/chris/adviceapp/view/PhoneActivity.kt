@@ -2,6 +2,7 @@ package com.chris.adviceapp.view
 
 import android.content.Intent
 import android.os.Bundle
+import android.telephony.PhoneNumberFormattingTextWatcher
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -11,6 +12,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.auth.PhoneAuthProvider
+import java.util.Locale
 import java.util.concurrent.TimeUnit
 
 class PhoneActivity : AppCompatActivity() {
@@ -26,25 +28,13 @@ class PhoneActivity : AppCompatActivity() {
         this.binding = ActivityPhoneBinding.inflate(layoutInflater)
         setContentView(this.binding.root)
 
-        binding.btnSms.setOnClickListener {
+        val country = Locale.getDefault().country
+        binding.tvPhone.addTextChangedListener(PhoneNumberFormattingTextWatcher(country))
+        setButtonClickListeners()
+        authenticationSettings()
+    }
 
-            val userPhoneNumber = binding.tvPhone.text.toString()
-
-            val options = PhoneAuthOptions.newBuilder(auth)
-                .setPhoneNumber(userPhoneNumber)
-                .setTimeout(60L, TimeUnit.SECONDS)
-                .setActivity(this)
-                .setCallbacks(callbacks)
-                .build()
-
-            PhoneAuthProvider.verifyPhoneNumber(options)
-            auth.useAppLanguage()
-        }
-
-        binding.btnSmsVerify.setOnClickListener {
-            signInWithSMSCode()
-        }
-
+    private fun authenticationSettings() {
         callbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             override fun onVerificationCompleted(credential: PhoneAuthCredential) {
                 Log.d("PhoneAuth", "onVerificationCompleted:$credential")
@@ -63,8 +53,21 @@ class PhoneActivity : AppCompatActivity() {
         }
     }
 
-    private fun signInWithSMSCode() {
-        val code = binding.tvPhoneVerify.text.toString()
+    private fun sendCodeToPhoneNumber(userPhoneNumber: String) {
+
+        val options = PhoneAuthOptions.newBuilder(auth)
+            .setPhoneNumber(userPhoneNumber)
+            .setTimeout(60L, TimeUnit.SECONDS)
+            .setActivity(this)
+            .setCallbacks(callbacks)
+            .build()
+
+        PhoneAuthProvider.verifyPhoneNumber(options)
+        auth.useAppLanguage()
+    }
+
+    private fun signInWithSMSCode(code: String) {
+
         val credential = PhoneAuthProvider.getCredential(verificationCode, code)
         signInWithPhoneAuthCredential(credential)
     }
@@ -83,5 +86,34 @@ class PhoneActivity : AppCompatActivity() {
                 Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    private fun setButtonClickListeners() {
+
+        binding.btnSms.setOnClickListener {
+
+            val userPhoneNumber = binding.tvPhone.text.toString()
+
+            if (userPhoneNumber.isEmpty()) {
+                binding.tvPhone.error = "Input Your Phone Number"
+            } else {
+                sendCodeToPhoneNumber(BrazilPrefixPhoneNumber + userPhoneNumber)
+            }
+        }
+
+        binding.btnSmsVerify.setOnClickListener {
+
+            val code = binding.tvPhoneVerify.text.toString()
+
+            if (code.isEmpty()) {
+                binding.tvPhone.error = "Input the code you've received"
+            } else {
+                signInWithSMSCode(code)
+            }
+        }
+    }
+
+    companion object {
+        const val BrazilPrefixPhoneNumber = "+55"
     }
 }
