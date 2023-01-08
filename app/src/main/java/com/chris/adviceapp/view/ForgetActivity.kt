@@ -19,13 +19,19 @@ class ForgetActivity : AppCompatActivity() {
 
         binding.btnReset.setOnClickListener {
             val email = binding.tvForget.text.toString()
-            auth.sendPasswordResetEmail(email).addOnCompleteListener {
-                task ->
-                if (task.isSuccessful) {
-                    Toast.makeText(applicationContext,
-                    "We sent a password reset email for your email address",
-                    Toast.LENGTH_SHORT).show()
-                    finish()
+
+            if (email.isEmpty()) {
+                binding.tvForget.error = "Input your email"
+                binding.tvForget.requestFocus()
+            } else {
+                auth.sendPasswordResetEmail(email).addOnCompleteListener {
+                        task ->
+                    if (task.isSuccessful) {
+                        Toast.makeText(applicationContext,
+                            "We sent a password reset email for your email address",
+                            Toast.LENGTH_SHORT).show()
+                        finish()
+                    }
                 }
             }
         }

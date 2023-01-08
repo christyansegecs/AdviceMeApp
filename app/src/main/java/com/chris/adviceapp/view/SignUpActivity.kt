@@ -17,12 +17,7 @@ class SignUpActivity : AppCompatActivity() {
         this.binding = ActivitySignUpBinding.inflate(layoutInflater)
         setContentView(this.binding.root)
 
-        binding.btnSignUp.setOnClickListener {
-            val userEmail = binding.userEmail.text.toString()
-            val password = binding.password.text.toString()
-            signUpWithFirebase(userEmail, password)
-        }
-
+        setButtonClickListener()
     }
 
     private fun signUpWithFirebase(userEmail: String, password: String) {
@@ -35,6 +30,24 @@ class SignUpActivity : AppCompatActivity() {
             } else {
                 Toast.makeText(applicationContext,task.exception?.toString(),
                     Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+
+    private fun setButtonClickListener() {
+
+        binding.btnSignUp.setOnClickListener {
+            val userEmail = binding.userEmail.text.toString()
+            val password = binding.password.text.toString()
+
+            if (userEmail.isEmpty()) {
+                binding.userEmail.error = "Input an Email"
+                binding.userEmail.requestFocus()
+            } else if (password.isEmpty()) {
+                binding.password.error = "Input a Password"
+                binding.password.requestFocus()
+            } else {
+                signUpWithFirebase(userEmail, password)
             }
         }
     }
