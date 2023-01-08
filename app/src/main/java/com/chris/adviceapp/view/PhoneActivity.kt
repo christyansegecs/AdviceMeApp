@@ -96,6 +96,7 @@ class PhoneActivity : AppCompatActivity() {
 
             if (userPhoneNumber.isEmpty()) {
                 binding.tvPhone.error = "Input Your Phone Number"
+                binding.tvPhone.requestFocus()
             } else {
                 sendCodeToPhoneNumber(BrazilPrefixPhoneNumber + userPhoneNumber)
             }
@@ -106,7 +107,8 @@ class PhoneActivity : AppCompatActivity() {
             val code = binding.tvPhoneVerify.text.toString()
 
             if (code.isEmpty()) {
-                binding.tvPhone.error = "Input the code you've received"
+                binding.tvPhoneVerify.error = "Input the code you've received"
+                binding.tvPhoneVerify.requestFocus()
             } else {
                 signInWithSMSCode(code)
             }

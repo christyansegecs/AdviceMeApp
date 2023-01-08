@@ -218,9 +218,10 @@ class LoginActivity : AppCompatActivity() {
 
             if (userEmail.isEmpty()) {
                 binding.tvEmail.error = "Input Your Email"
-
+                binding.tvEmail.requestFocus()
             } else if (password.isEmpty()) {
                 binding.tvPassword.error = "Input Your Password"
+                binding.tvPassword.requestFocus()
             } else {
                 loginWithEmailAndPassword(userEmail, password)
             }
