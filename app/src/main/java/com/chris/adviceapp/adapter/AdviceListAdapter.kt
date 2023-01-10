@@ -18,7 +18,7 @@ class AdviceListAdapter : ListAdapter<Advice, AdviceListAdapter.AdviceViewHolder
 
     override fun onBindViewHolder(holder: AdviceViewHolder, position: Int) {
         val current = getItem(position)
-        holder.bind("${current.id.toString()}. ${current.advice}")
+        holder.bind("${current.id} - ${current.advice}")
     }
 
     class AdviceViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

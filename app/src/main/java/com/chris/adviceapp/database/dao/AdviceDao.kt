@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface AdviceDao {
 
-    @Query("SELECT * FROM advice_table ORDER BY advice ASC")
+    @Query("SELECT * FROM advice_table ORDER BY id ASC")
     fun getAlphabetizedAdvices(): Flow<List<Advice>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
