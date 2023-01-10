@@ -48,4 +48,10 @@
     <string name="signup_successful">Your account has been created</string>
     <string name="error_input_an_email">Input an Email</string>
     <string name="error_input_an_password">Input a Password</string>
+    <string name="facebook_app_id" translatable="false">1182290422675256</string>
+    <string name="fb_client_token" translatable="false">3610c188b0ed8122d62ac87d9e5e9b84</string>
+    <string name="fab_new_advice">Create a new Advice</string>
+    <string name="btn_new_advice">Save this Advice</string>
+    <string name="tv_new_advice">Enter Your Advice Here</string>
+    <string name="toast_new_advice">Your Advice was saved in the list</string>
 </resources>

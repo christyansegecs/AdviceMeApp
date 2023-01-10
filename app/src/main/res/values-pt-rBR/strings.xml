@@ -46,4 +46,8 @@
     <string name="signup_successful">Sua conta foi criada</string>
     <string name="error_input_an_email">Insira um Email</string>
     <string name="error_input_an_password">Insira uma Senha</string>
+    <string name="fab_new_advice">Crie um novo Conselho</string>
+    <string name="btn_new_advice">Salve esse Conselho</string>
+    <string name="tv_new_advice">Insira seu Conselho aqui</string>
+    <string name="toast_new_advice">Seu conselho foi salvo na lista</string>
 </resources>

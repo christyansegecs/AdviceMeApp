@@ -47,6 +47,10 @@
             android:name=".view.SavedAdvicesActivity"
             android:exported="false">
         </activity>
+        <activity
+            android:name=".view.NewAdviceActivity"
+            android:exported="true">
+        </activity>
 
     </application>
 

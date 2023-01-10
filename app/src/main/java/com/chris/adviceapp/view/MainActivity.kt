@@ -49,22 +49,12 @@ class MainActivity : AppCompatActivity() {
         setupViewModel()
         viewModel.getAdvice()
         handleAdvices()
+        setupClickListener()
     }
 
     override fun onStart() {
         super.onStart()
         viewModel.getAdvice()
-
-        binding.btnNewAdvice.setOnClickListener { viewModel.getAdvice() }
-
-        binding.btnSaveAdvice.setOnClickListener {
-            viewModelDB.insert(Advice(currentAdvice))
-        }
-
-        binding.btnList.setOnClickListener {
-            val intent = Intent(this, SavedAdvicesActivity::class.java)
-            startActivity(intent)
-        }
     }
 
     private fun handleAdvices() = lifecycleScope.launchWhenCreated{
@@ -107,6 +97,23 @@ class MainActivity : AppCompatActivity() {
                 return true
             }
         })
+    }
+
+    private fun setupClickListener() {
+        binding.btnNewAdvice.setOnClickListener { viewModel.getAdvice() }
+
+        binding.btnSaveAdvice.setOnClickListener {
+            viewModelDB.insert(Advice(currentAdvice))
+        }
+
+        binding.btnList.setOnClickListener {
+            val intent = Intent(this, SavedAdvicesActivity::class.java)
+            startActivity(intent)
+        }
+        binding.fabNewAdvice.setOnClickListener {
+            val intent = Intent(this, NewAdviceActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun showDialog() {
