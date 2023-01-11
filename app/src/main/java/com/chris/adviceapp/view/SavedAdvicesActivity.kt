@@ -27,10 +27,12 @@ class SavedAdvicesActivity : AppCompatActivity() {
         setContentView(this.binding.root)
 
         this.recyclerView = this.binding.rvAdvice
-        this.adapter = AdviceListAdapter()
+        this.adapter = AdviceListAdapter { advice ->
+            adapter.deleteAdvice(advice)
+            adviceDatabaseViewModel.delete(advice)
+        }
         this.recyclerView.adapter = this.adapter
         this.recyclerView.layoutManager = LinearLayoutManager(this)
-
     }
 
     override fun onStart() {

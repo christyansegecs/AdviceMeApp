@@ -12,4 +12,8 @@ class AdviceDatabaseViewModel (private val repository: AdviceDatabaseRepository)
     fun insert(advice: Advice) = viewModelScope.launch {
         repository.insert(advice)
     }
+
+    fun delete(advice: Advice) = viewModelScope.launch {
+        repository.delete(advice)
+    }
 }

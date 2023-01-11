@@ -1,6 +1,7 @@
 package com.chris.adviceapp.database.dao
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.OnConflictStrategy
@@ -15,5 +16,8 @@ interface AdviceDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(advice: Advice)
+
+    @Delete
+    suspend fun delete(advice: Advice)
 
 }
