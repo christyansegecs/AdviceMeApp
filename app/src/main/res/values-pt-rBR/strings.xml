@@ -50,4 +50,10 @@
     <string name="btn_new_advice">Salve esse Conselho</string>
     <string name="tv_new_advice">Insira seu Conselho aqui</string>
     <string name="toast_new_advice">Seu conselho foi salvo na lista</string>
+    <string name="ic_delete">Deletar</string>
+    <string name="toast_delete_advice">foi deletado</string>
+    <string name="dialog_delete_advice">Deletar Esse Conselho?</string>
+    <string name="toast_delete_all">Todos os Conselhos foram deletados</string>
+    <string name="dialog_delete_all_advices">Deletar todos os Conselhos salvos?</string>
+    <string name="menu_delete_all">Deletar todos os Conselhos salvos</string>
 </resources>

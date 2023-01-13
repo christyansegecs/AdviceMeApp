@@ -6,7 +6,6 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.chris.adviceapp.database.dao.AdviceDao
 import com.chris.adviceapp.database.models.Advice
-import kotlinx.coroutines.CoroutineScope
 
 @Database(entities = [Advice::class], version = 1)
 abstract class AdviceRoomDatabase : RoomDatabase() {
@@ -20,7 +19,7 @@ abstract class AdviceRoomDatabase : RoomDatabase() {
         @Volatile
         private var INSTANCE: AdviceRoomDatabase? = null
 
-        fun getDatabase(scope: CoroutineScope, context: Context): AdviceRoomDatabase {
+        fun getDatabase(context: Context): AdviceRoomDatabase {
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,

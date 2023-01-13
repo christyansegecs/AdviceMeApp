@@ -19,4 +19,9 @@ class AdviceDatabaseRepository(private val adviceDao: AdviceDao) {
     suspend fun delete(advice: Advice) {
         adviceDao.delete(advice)
     }
+
+    @WorkerThread
+    suspend fun deleteAll() {
+        adviceDao.deleteAll()
+    }
 }

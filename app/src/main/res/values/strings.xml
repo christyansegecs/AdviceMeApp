@@ -54,4 +54,11 @@
     <string name="btn_new_advice">Save this Advice</string>
     <string name="tv_new_advice">Enter Your Advice Here</string>
     <string name="toast_new_advice">Your Advice was saved in the list</string>
+    <string name="ic_delete">Delete</string>
+    <string name="toast_delete_advice">was deleted</string>
+    <string name="dialog_delete_advice">Delete Advice?</string>
+    <string name="dialog_delete_all_advices">Delete all saved Advices?</string>
+    <string name="toast_delete_all">Deleted all saved advices</string>
+    <string name="menu_delete_all">Deleted all saved advices</string>
+    <string name="menu_sign_out" translatable="false">Sign out</string>
 </resources>

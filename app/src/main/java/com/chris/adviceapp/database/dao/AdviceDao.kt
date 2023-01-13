@@ -20,4 +20,7 @@ interface AdviceDao {
     @Delete
     suspend fun delete(advice: Advice)
 
+    @Query("DELETE FROM advice_table")
+    suspend fun deleteAll()
+
 }

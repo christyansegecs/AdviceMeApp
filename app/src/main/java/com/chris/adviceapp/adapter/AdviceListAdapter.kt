@@ -1,61 +1,50 @@
 package com.chris.adviceapp.adapter
 
-import android.util.Log
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.chris.adviceapp.R
 import com.chris.adviceapp.database.models.Advice
 
-class AdviceListAdapter(private val onDeleteClick: (Advice) -> Unit
-) : ListAdapter<Advice, AdviceListAdapter.AdviceViewHolder>(AdvicesComparator()) {
+class AdviceListAdapter(
+    val context: Context,
+    val noteClickDeleteInterface: NoteClickDeleteInterface
+) : RecyclerView.Adapter<AdviceListAdapter.ViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AdviceViewHolder {
-        return AdviceViewHolder.create(parent)
+    private val allAdvices = ArrayList<Advice>()
+    inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
+        val tvAdvice =itemView.findViewById<TextView>(R.id.tvAdviceDaRV)
+        val icDelete=itemView.findViewById<ImageView>(R.id.icDelete)
     }
 
-    override fun onBindViewHolder(holder: AdviceViewHolder, position: Int) {
-        val current = getItem(position)
-        holder.bind("${current.id} - ${current.advice}", onDeleteClick)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.recyclerview_advices,parent,false)
+        return ViewHolder(itemView)
     }
 
-    class AdviceViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val adviceItemView: TextView = itemView.findViewById(R.id.tvAdviceDaRV)
-
-        fun bind(text: String?, onItemClicked: (Advice) -> Unit) {
-            adviceItemView.text = text
-
-            itemView.setOnClickListener {
-                onItemClicked(Advice(adviceItemView.text as String))
-            }
-        }
-
-        companion object {
-            fun create(parent: ViewGroup): AdviceViewHolder {
-                val view: View = LayoutInflater.from(parent.context)
-                    .inflate(R.layout.recyclerview_advices, parent, false)
-                return AdviceViewHolder(view)
-            }
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.tvAdvice.setText("${allAdvices.get(position).id} - ${allAdvices.get(position).advice}")
+        holder.icDelete.setOnClickListener{
+            noteClickDeleteInterface.onDeleteIconClick(allAdvices.get(position))
         }
     }
 
-    class AdvicesComparator : DiffUtil.ItemCallback<Advice>() {
-        override fun areItemsTheSame(oldItem: Advice, newItem: Advice): Boolean {
-            return oldItem === newItem
-        }
-
-        override fun areContentsTheSame(oldItem: Advice, newItem: Advice): Boolean {
-            return oldItem.advice == newItem.advice
-        }
+    override fun getItemCount(): Int {
+        return allAdvices.size
     }
 
-    fun deleteAdvice(advice: Advice) : Advice {
-        Log.d("RVAdvicedeleteAdvice",advice.advice)
-        return Advice(advice.advice)
-
+    fun updateList(newList: List<Advice>){
+        allAdvices.clear()
+        allAdvices.addAll(newList)
+        notifyDataSetChanged()
     }
+
+}
+
+interface  NoteClickDeleteInterface{
+    fun onDeleteIconClick(advice: Advice)
 }

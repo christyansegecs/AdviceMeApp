@@ -10,7 +10,7 @@ class AdviceApplication : Application() {
 
     val applicationScope = CoroutineScope(SupervisorJob())
 
-    val database by lazy { AdviceRoomDatabase.getDatabase(applicationScope,this) }
+    val database by lazy { AdviceRoomDatabase.getDatabase(this) }
     val repository by lazy { AdviceDatabaseRepository(database.adviceDao()) }
 
 }
