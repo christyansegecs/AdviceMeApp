@@ -17,8 +17,11 @@ class AdviceListAdapter(
 
     private val allAdvices = ArrayList<Advice>()
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
-        val tvAdvice =itemView.findViewById<TextView>(R.id.tvAdviceDaRV)
-        val icDelete=itemView.findViewById<ImageView>(R.id.icDelete)
+        val tvAdvice = itemView.findViewById<TextView>(R.id.tvAdviceDaRV)
+        val icDelete = itemView.findViewById<ImageView>(R.id.icDelete)
+        val ivUser = itemView.findViewById<ImageView>(R.id.ivUser)
+        //        val tvUser = itemView.findViewById<TextView>(R.id.tvUser)
+        val tvDate = itemView.findViewById<TextView>(R.id.tvDate)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -28,6 +31,8 @@ class AdviceListAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.tvAdvice.setText("${allAdvices.get(position).id} - ${allAdvices.get(position).advice}")
+//        val
+//        holder.tvDate.setText("${allAdvices.get(position).date}")
         holder.icDelete.setOnClickListener{
             noteClickDeleteInterface.onDeleteIconClick(allAdvices.get(position))
         }

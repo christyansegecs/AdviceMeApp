@@ -10,6 +10,8 @@ import com.chris.adviceapp.database.models.Advice
 import com.chris.adviceapp.databinding.ActivityNewAdviceBinding
 import com.chris.adviceapp.viewmodel.AdviceDatabaseViewModel
 import com.chris.adviceapp.viewmodel.AdviceDatabaseViewModelFactory
+import java.text.SimpleDateFormat
+import java.util.*
 
 class NewAdviceActivity : AppCompatActivity()  {
 
@@ -26,7 +28,9 @@ class NewAdviceActivity : AppCompatActivity()  {
         val newAdvice = binding.tvNewAdvice.text
 
         binding.btnNewAdvice.setOnClickListener {
-            viewModelDB.insert(Advice(newAdvice.toString()))
+            val sdf = SimpleDateFormat("MMM dd,yyyy")
+            val currentDate: String = sdf.format(Date())
+            viewModelDB.insert(Advice(newAdvice.toString(), currentDate))
             Toast.makeText(this, getString(R.string.toast_new_advice) , Toast.LENGTH_SHORT).show()
             finish()
         }

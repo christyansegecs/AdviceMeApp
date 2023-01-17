@@ -56,4 +56,6 @@
     <string name="toast_delete_all">Todos os Conselhos foram deletados</string>
     <string name="dialog_delete_all_advices">Deletar todos os Conselhos salvos?</string>
     <string name="menu_delete_all">Deletar todos os Conselhos salvos</string>
+    <string name="btn_add_user_image">Clique na imagem para adicionar uma imagem de perfil</string>
+    <string name="content_description_image_user">Imagem do Perfil</string>
 </resources>

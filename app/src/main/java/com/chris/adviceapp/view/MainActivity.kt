@@ -1,7 +1,6 @@
 package com.chris.adviceapp.view
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
@@ -9,6 +8,7 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
@@ -28,17 +28,23 @@ import com.facebook.login.LoginManager
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
+import java.text.SimpleDateFormat
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-
     private val retrofitService = AdviceService.getInstance()
     private lateinit var viewModel: AdviceViewModel
     private val viewModelDB: AdviceDatabaseViewModel by viewModels {
         AdviceDatabaseViewModelFactory((application as AdviceApplication).repository)
     }
     private lateinit var currentAdvice : String
+    private val auth = FirebaseAuth.getInstance()
+    private val user = auth.currentUser
+    val database = FirebaseDatabase.getInstance()
+    val datatabaseReference = database.reference.child("userAdvices")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -103,7 +109,16 @@ class MainActivity : AppCompatActivity() {
         binding.btnNewAdvice.setOnClickListener { viewModel.getAdvice() }
 
         binding.btnSaveAdvice.setOnClickListener {
-            viewModelDB.insert(Advice(currentAdvice))
+            val sdf = SimpleDateFormat("MMM dd,yyyy")
+            val currentDate: String = sdf.format(Date())
+            viewModelDB.insert(Advice(currentAdvice, currentDate))
+            user?.let {
+                val userEmail = it.email
+                if (userEmail != null) {
+                    datatabaseReference.child("User Email").setValue(userEmail)
+                    datatabaseReference.child("Advices").setValue(Advice(currentAdvice,currentDate))
+                }
+            }
         }
 
         binding.btnList.setOnClickListener {

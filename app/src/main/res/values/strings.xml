@@ -61,4 +61,6 @@
     <string name="toast_delete_all">Deleted all saved advices</string>
     <string name="menu_delete_all">Deleted all saved advices</string>
     <string name="menu_sign_out" translatable="false">Sign out</string>
+    <string name="btn_add_user_image">To select profile image, click on the picture</string>
+    <string name="content_description_image_user">Profile Image</string>
 </resources>

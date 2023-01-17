@@ -11,15 +11,40 @@
         android:id="@+id/tvSignUp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="50dp"
-        android:layout_marginEnd="50dp"
-        android:layout_marginBottom="50dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
         android:gravity="center"
         android:text="@string/sign_up"
         android:textColor="@color/white"
         android:textSize="35sp"
         android:textStyle="bold" />
+
+    <ImageView
+        android:id="@+id/ivNewUser"
+        android:layout_width="160dp"
+        android:layout_height="198dp"
+        android:layout_centerHorizontal="true"
+        android:background="@color/white"
+        app:srcCompat="@drawable/calvin"
+        android:layout_below="@id/tvSignUp"
+        android:clickable="true"
+        android:contentDescription="@string/content_description_image_user"
+        android:focusable="true" />
+
+    <TextView
+        android:id="@+id/tvAddImageUser"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:text="@string/btn_add_user_image"
+        android:textColorHint="@color/white"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:layout_below="@id/ivNewUser"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp" />
 
     <EditText
         android:id="@+id/userEmail"
@@ -33,7 +58,7 @@
         android:drawablePadding="20dp"
         android:padding="20dp"
         android:textColorHint="@color/white"
-        android:layout_below="@id/tvSignUp"
+        android:layout_below="@id/tvAddImageUser"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
