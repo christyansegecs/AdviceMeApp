@@ -114,7 +114,7 @@ class SignUpActivity : AppCompatActivity() {
                 imageUri = imageData.data
 
                 imageUri?.let {
-                    Picasso.get().load(it).into(binding.ivNewUser)
+                    Picasso.get().load(it).rotate(90F).into(binding.ivNewUser)
                 }
             }
         }
