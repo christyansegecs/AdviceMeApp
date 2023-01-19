@@ -44,7 +44,7 @@ class MainActivity : AppCompatActivity() {
     private val auth = FirebaseAuth.getInstance()
     private val user = auth.currentUser
     val database = FirebaseDatabase.getInstance()
-    val datatabaseReference = database.reference.child("userAdvices")
+    private val databaseReference = database.reference.child("userAdvices")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,9 +82,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupViewModel() {
-        viewModel = ViewModelProvider(this, AdviceViewModelFactory(AdviceRepository(retrofitService))).get(
-            AdviceViewModel::class.java
-        )
+        viewModel = ViewModelProvider(this, AdviceViewModelFactory(AdviceRepository(retrofitService)))[AdviceViewModel::class.java]
     }
 
     private fun setupActionBar() {
@@ -115,8 +113,8 @@ class MainActivity : AppCompatActivity() {
             user?.let {
                 val userEmail = it.email
                 if (userEmail != null) {
-                    datatabaseReference.child("User Email").setValue(userEmail)
-                    datatabaseReference.child("Advices").setValue(Advice(currentAdvice,currentDate))
+                    databaseReference.child("User Email").setValue(userEmail)
+                    databaseReference.child("Advices").setValue(Advice(currentAdvice,currentDate))
                 }
             }
         }

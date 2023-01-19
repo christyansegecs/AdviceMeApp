@@ -16,6 +16,7 @@ import androidx.core.content.ContextCompat
 import com.chris.adviceapp.R
 import com.chris.adviceapp.databinding.ActivitySignUpBinding
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.squareup.picasso.Picasso
@@ -27,8 +28,10 @@ class SignUpActivity : AppCompatActivity() {
     private val firebaseStorage : FirebaseStorage = FirebaseStorage.getInstance()
     private val storageReference: StorageReference = firebaseStorage.reference
     private lateinit var binding: ActivitySignUpBinding
-    lateinit var activityResultLauncher : ActivityResultLauncher<Intent>
-    var imageUri : Uri? = null
+    private lateinit var activityResultLauncher : ActivityResultLauncher<Intent>
+    private var imageUri : Uri? = null
+    val database = FirebaseDatabase.getInstance()
+    private val databaseReference = database.reference.child("image")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,6 +68,7 @@ class SignUpActivity : AppCompatActivity() {
             intent.type = "image/*"
             intent.action = Intent.ACTION_GET_CONTENT
             activityResultLauncher.launch(intent)
+            saveImageProfile()
         }
     }
 
@@ -88,19 +92,17 @@ class SignUpActivity : AppCompatActivity() {
     private fun addUserToDatabase(url: String) {
         val email: String
         val password: String
-//        val id: String = userReference.push().key.toString()
-//        val advice = Advice(id, email, password, url)
-//
-//        userReference.child(id).setValue(advice).addOnCompleteListener { task ->
-//
-//            if (task.isSuccessful) {
-//                Toast.makeText(applicationContext, "The new user has been added to the database", Toast.LENGTH_LONG).show()
-//                finish()
-//            } else {
-//                Toast.makeText(applicationContext, task.exception.toString(), Toast.LENGTH_LONG).show()
-//            }
-//
-//        }
+        val id: String = databaseReference.push().key.toString()
+
+        databaseReference.child(id).setValue(id).addOnCompleteListener { task ->
+
+            if (task.isSuccessful) {
+                Toast.makeText(applicationContext, "The new user has been added to the database", Toast.LENGTH_LONG).show()
+                finish()
+            } else {
+                Toast.makeText(applicationContext, task.exception.toString(), Toast.LENGTH_LONG).show()
+            }
+        }
     }
 
     private fun registerActivityForResult() {

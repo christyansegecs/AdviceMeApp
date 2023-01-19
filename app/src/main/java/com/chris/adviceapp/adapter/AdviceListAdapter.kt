@@ -9,18 +9,21 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.chris.adviceapp.R
 import com.chris.adviceapp.database.models.Advice
+import com.google.firebase.auth.FirebaseAuth
 
 class AdviceListAdapter(
     val context: Context,
-    val noteClickDeleteInterface: NoteClickDeleteInterface
+    private val noteClickDeleteInterface: NoteClickDeleteInterface
 ) : RecyclerView.Adapter<AdviceListAdapter.ViewHolder>() {
 
     private val allAdvices = ArrayList<Advice>()
+    private val auth = FirebaseAuth.getInstance()
+    private val user = auth.currentUser
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
         val tvAdvice = itemView.findViewById<TextView>(R.id.tvAdviceDaRV)
         val icDelete = itemView.findViewById<ImageView>(R.id.icDelete)
-        val ivUser = itemView.findViewById<ImageView>(R.id.ivUser)
-        //        val tvUser = itemView.findViewById<TextView>(R.id.tvUser)
+//        val ivUser = itemView.findViewById<ImageView>(R.id.ivUser)
+        val tvUser = itemView.findViewById<TextView>(R.id.tvUser)
         val tvDate = itemView.findViewById<TextView>(R.id.tvDate)
     }
 
@@ -30,11 +33,11 @@ class AdviceListAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.tvAdvice.setText("${allAdvices.get(position).id} - ${allAdvices.get(position).advice}")
-//        val
-//        holder.tvDate.setText("${allAdvices.get(position).date}")
+        holder.tvAdvice.text = "${allAdvices[position].id} - ${allAdvices[position].advice}"
+        holder.tvDate.text = allAdvices[position].date
+        holder.tvUser.text = "${user?.email}"
         holder.icDelete.setOnClickListener{
-            noteClickDeleteInterface.onDeleteIconClick(allAdvices.get(position))
+            noteClickDeleteInterface.onDeleteIconClick(allAdvices[position])
         }
     }
 
