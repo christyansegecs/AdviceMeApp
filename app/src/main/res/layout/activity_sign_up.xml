@@ -11,25 +11,25 @@
         android:id="@+id/tvSignUp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
         android:gravity="center"
         android:text="@string/sign_up"
         android:textColor="@color/white"
         android:textSize="35sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"/>
 
     <ImageView
         android:id="@+id/ivNewUser"
         android:layout_width="160dp"
         android:layout_height="198dp"
-        android:layout_centerHorizontal="true"
         android:background="@color/white"
         app:srcCompat="@drawable/calvin"
         android:layout_below="@id/tvSignUp"
         android:clickable="true"
         android:contentDescription="@string/content_description_image_user"
-        android:focusable="true" />
+        android:focusable="true"
+        android:layout_centerHorizontal="true"/>
 
     <TextView
         android:id="@+id/tvAddImageUser"
@@ -47,7 +47,7 @@
         android:layout_marginBottom="10dp" />
 
     <EditText
-        android:id="@+id/userEmail"
+        android:id="@+id/tvUserEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/hint_user_email"
@@ -65,14 +65,9 @@
         android:layout_marginBottom="10dp"/>
 
     <EditText
-        android:id="@+id/password"
+        android:id="@+id/tvPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/userEmail"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="10dp"
         android:background="#30ffffff"
         android:drawableStart="@drawable/ic_info"
         android:drawablePadding="20dp"
@@ -80,18 +75,41 @@
         android:inputType="textPassword"
         android:padding="20dp"
         android:textColor="@color/white"
-        android:textColorHint="@color/white" />
+        android:textColorHint="@color/white"
+        android:layout_below="@id/tvUserEmail"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"/>
 
     <ImageView
         android:id="@+id/icRedEye"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_remove_red_eye"
-        android:layout_alignEnd="@+id/password"
-        android:layout_below="@id/userEmail"
+        app:tint="#e0e0e0"
+        android:layout_alignEnd="@+id/tvPassword"
+        android:layout_below="@id/tvUserEmail"
         android:layout_marginTop="30dp"
         android:layout_marginEnd="40dp"
-        app:tint="#e0e0e0" />
+        android:contentDescription="@string/ic_hide_password" />
+
+    <EditText
+        android:id="@+id/tvUserName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/tv_user_name"
+        android:inputType="text"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:textColorHint="@color/black"
+        android:layout_below="@id/tvPassword"
+        android:padding="20dp"
+        android:drawablePadding="20dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp" />
 
     <Button
         android:id="@+id/btnSignUp"
@@ -99,7 +117,7 @@
         android:layout_height="wrap_content"
         android:text="@string/sign_up"
         android:backgroundTint="@color/design_default_color_secondary"
-        android:layout_below="@id/password"
+        android:layout_below="@id/tvUserName"
         android:layout_centerHorizontal="true"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"

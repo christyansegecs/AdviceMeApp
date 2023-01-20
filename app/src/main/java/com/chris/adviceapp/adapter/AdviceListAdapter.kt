@@ -50,7 +50,6 @@ class AdviceListAdapter(
         allAdvices.addAll(newList)
         notifyDataSetChanged()
     }
-
 }
 
 interface  NoteClickDeleteInterface{

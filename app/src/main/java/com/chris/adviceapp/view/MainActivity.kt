@@ -97,10 +97,18 @@ class MainActivity : AppCompatActivity() {
                     R.id.signOut -> {
                         showDialog()
                     }
+                    R.id.userProfile -> {
+                        goToUserProfile()
+                    }
                 }
                 return true
             }
         })
+    }
+
+    private fun goToUserProfile() {
+        val intent = Intent(this, UserProfileActivity::class.java)
+        startActivity(intent)
     }
 
     private fun setupClickListener() {

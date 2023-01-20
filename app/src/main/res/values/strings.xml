@@ -48,6 +48,7 @@
     <string name="signup_successful">Your account has been created</string>
     <string name="error_input_an_email">Input an Email</string>
     <string name="error_input_an_password">Input a Password</string>
+    <string name="error_input_an_user_name">Input an User Name</string>
     <string name="facebook_app_id" translatable="false">1182290422675256</string>
     <string name="fb_client_token" translatable="false">3610c188b0ed8122d62ac87d9e5e9b84</string>
     <string name="fab_new_advice">Create a new Advice</string>
@@ -63,4 +64,11 @@
     <string name="menu_sign_out" translatable="false">Sign out</string>
     <string name="btn_add_user_image">To select profile image, click on the picture</string>
     <string name="content_description_image_user">Profile Image</string>
+    <string name="text_user_profile">User Profile</string>
+    <string name="menu_user_profile">User Profile</string>
+    <string name="tv_user_name">User Name</string>
+    <string name="toast_user_created">Welcome! User Created</string>
+    <string name="tv_change_user_name">click here to change your username</string>
+    <string name="tv_change_user_image">click here to change your profile image</string>
+    <string name="ic_hide_password">hide password</string>
 </resources>
