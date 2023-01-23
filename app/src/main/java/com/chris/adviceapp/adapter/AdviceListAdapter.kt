@@ -1,6 +1,7 @@
 package com.chris.adviceapp.adapter
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +11,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.chris.adviceapp.R
 import com.chris.adviceapp.database.models.Advice
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import com.squareup.picasso.Picasso
+import jp.wasabeef.picasso.transformations.CropCircleTransformation
 
 class AdviceListAdapter(
     val context: Context,
@@ -22,7 +29,7 @@ class AdviceListAdapter(
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
         val tvAdvice = itemView.findViewById<TextView>(R.id.tvAdviceDaRV)
         val icDelete = itemView.findViewById<ImageView>(R.id.icDelete)
-//        val ivUser = itemView.findViewById<ImageView>(R.id.ivUser)
+        val ivUser = itemView.findViewById<ImageView>(R.id.ivUser)
         val tvUser = itemView.findViewById<TextView>(R.id.tvUser)
         val tvDate = itemView.findViewById<TextView>(R.id.tvDate)
     }
@@ -33,6 +40,17 @@ class AdviceListAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val ref = FirebaseDatabase.getInstance().getReference("/users/profileImageUrl")
+        ref.addListenerForSingleValueEvent(object: ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val imageString = snapshot.value.toString()
+                Picasso.get().load(imageString).rotate(90F).transform(CropCircleTransformation()).into(holder.ivUser)
+
+            }
+            override fun onCancelled(error: DatabaseError) {
+                Log.d("snapshot", "something went wrong")
+            }
+        })
         holder.tvAdvice.text = "${allAdvices[position].id} - ${allAdvices[position].advice}"
         holder.tvDate.text = allAdvices[position].date
         holder.tvUser.text = "${user?.email}"

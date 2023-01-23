@@ -17,17 +17,18 @@
         android:textSize="35sp"
         android:textStyle="bold" />
 
-    <ImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/ivUserProfile"
         app:srcCompat="@drawable/calvin"
-        android:layout_width="160dp"
-        android:layout_height="198dp"
+        android:layout_width="180dp"
+        android:layout_height="180dp"
         android:layout_below="@id/tvUserProfile"
         android:layout_centerHorizontal="true"
         android:background="@color/white"
         android:clickable="true"
         android:contentDescription="@string/content_description_image_user"
-        android:focusable="true" />
+        android:focusable="true"
+        app:shapeAppearance="@style/circle"/>
 
     <TextView
         android:id="@+id/tvChangeImageUser"
