@@ -20,6 +20,7 @@ import com.chris.adviceapp.database.models.Advice
 import com.chris.adviceapp.databinding.ActivityMainBinding
 import com.chris.adviceapp.repository.AdviceRepository
 import com.chris.adviceapp.util.AdviceState
+import com.chris.adviceapp.view.SignUpActivity.Companion.USER_NAME
 import com.chris.adviceapp.viewmodel.AdviceDatabaseViewModel
 import com.chris.adviceapp.viewmodel.AdviceDatabaseViewModelFactory
 import com.chris.adviceapp.viewmodel.AdviceViewModel
@@ -28,6 +29,7 @@ import com.facebook.login.LoginManager
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import java.text.SimpleDateFormat
 import java.util.*
@@ -43,14 +45,14 @@ class MainActivity : AppCompatActivity() {
     private lateinit var currentAdvice : String
     private val auth = FirebaseAuth.getInstance()
     private val user = auth.currentUser
-    val database = FirebaseDatabase.getInstance()
-    private val databaseReference = database.reference.child("userAdvices")
+    private lateinit var databaseRef: DatabaseReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         this.binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(this.binding.root)
 
+        getUserName()
         setupActionBar()
         setupViewModel()
         viewModel.getAdvice()
@@ -61,6 +63,11 @@ class MainActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         viewModel.getAdvice()
+    }
+
+    private fun getUserName() {
+        val userName = intent.getStringExtra(USER_NAME)
+        databaseRef = FirebaseDatabase.getInstance().getReference("/users/$userName")
     }
 
     private fun handleAdvices() = lifecycleScope.launchWhenCreated{
@@ -118,13 +125,7 @@ class MainActivity : AppCompatActivity() {
             val sdf = SimpleDateFormat("MMM dd,yyyy")
             val currentDate: String = sdf.format(Date())
             viewModelDB.insert(Advice(currentAdvice, currentDate))
-            user?.let {
-                val userEmail = it.email
-                if (userEmail != null) {
-                    databaseReference.child("User Email").setValue(userEmail)
-                    databaseReference.child("Advices").setValue(Advice(currentAdvice,currentDate))
-                }
-            }
+            databaseRef.child("Advices").push().setValue(currentAdvice)
         }
 
         binding.btnList.setOnClickListener {

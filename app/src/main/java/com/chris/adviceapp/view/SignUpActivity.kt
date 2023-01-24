@@ -86,9 +86,9 @@ class SignUpActivity : AppCompatActivity() {
 
     private fun saveUserToFirebaseDatabase(url: String) {
         val uid = FirebaseAuth.getInstance().uid ?: ""
-        val ref = FirebaseDatabase.getInstance().getReference("/users/$uid")
         val userName = binding.tvUserName.text.toString()
         val userEmail = binding.tvUserEmail.text.toString()
+        val ref = FirebaseDatabase.getInstance().getReference("/users/$userName")
         val user = User(uid, userName, userEmail, url)
 
         ref.setValue(user)
@@ -113,7 +113,7 @@ class SignUpActivity : AppCompatActivity() {
             } else {
                 signUpWithFirebase(userEmail, password)
                 uploadImageToFirebaseStorage()
-                val intent = Intent(applicationContext, MainActivity::class.java)
+                val intent = Intent(applicationContext, MainActivity::class.java).putExtra(USER_NAME, userName)
                 finish()
                 startActivity(intent)
                 Toast.makeText(
@@ -137,4 +137,9 @@ class SignUpActivity : AppCompatActivity() {
             chooseImage()
         }
     }
+
+    companion object {
+        const val USER_NAME = "userName"
+    }
+
 }
