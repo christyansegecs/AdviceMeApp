@@ -1,6 +1,7 @@
 package com.chris.adviceapp.view
 
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -19,6 +20,13 @@ import com.chris.adviceapp.database.models.Advice
 import com.chris.adviceapp.databinding.ActivitySavedAdvicesBinding
 import com.chris.adviceapp.viewmodel.AdviceDatabaseViewModel
 import com.chris.adviceapp.viewmodel.AdviceDatabaseViewModelFactory
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class SavedAdvicesActivity : AppCompatActivity(), NoteClickDeleteInterface {
@@ -29,6 +37,10 @@ class SavedAdvicesActivity : AppCompatActivity(), NoteClickDeleteInterface {
     private val adviceDatabaseViewModel : AdviceDatabaseViewModel by viewModels {
         AdviceDatabaseViewModelFactory((application as AdviceApplication).repository)
     }
+    val auth = FirebaseAuth.getInstance()
+    val user = auth.currentUser
+    val databaseAdvicesRef = FirebaseDatabase.getInstance().getReference("/users/${user?.uid}/Advices")
+    val allAdvices = ArrayList<Advice>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,14 +54,33 @@ class SavedAdvicesActivity : AppCompatActivity(), NoteClickDeleteInterface {
         this.recyclerView.layoutManager = LinearLayoutManager(this)
 
         setupActionBar()
+        fetchAdvicesFromDatabase()
 
-        adviceDatabaseViewModel.allAdvices.observe(this) { list ->
-            list?.let {
-                adapter.updateList(it)
-            }
-        }
-
+//        adviceDatabaseViewModel.allAdvices.observe(this) { list ->
+//            list?.let {
+//                adapter.updateList(it)
+//            }
+//        }
     }
+
+    private fun fetchAdvicesFromDatabase() {
+        val sdf = SimpleDateFormat("MMM dd,yyyy")
+        val currentDate: String = sdf.format(Date())
+        databaseAdvicesRef.addListenerForSingleValueEvent(object: ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                snapshot.children.forEach {
+                    Log.d("NewAdvice", it.toString())
+                    val advice = it.value.toString()
+                    if (advice != null) {
+                        allAdvices.add(Advice(advice, currentDate))
+                        adapter.updateList(allAdvices)
+                    }
+                }
+            }
+            override fun onCancelled(error: DatabaseError) {}
+        })
+    }
+
     override fun onDeleteIconClick(advice: Advice) {
 
         val dialog = AlertDialog.Builder(this)
