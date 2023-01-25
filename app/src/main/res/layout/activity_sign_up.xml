@@ -19,16 +19,17 @@
         android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp"/>
 
-    <ImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/ivNewUser"
-        android:layout_width="160dp"
-        android:layout_height="198dp"
+        android:layout_width="180dp"
+        android:layout_height="180dp"
         android:background="@color/white"
         app:srcCompat="@drawable/calvin"
         android:layout_below="@id/tvSignUp"
         android:clickable="true"
         android:contentDescription="@string/content_description_image_user"
         android:focusable="true"
+        app:shapeAppearance="@style/circle"
         android:layout_centerHorizontal="true"/>
 
     <TextView
@@ -98,12 +99,14 @@
         android:id="@+id/tvUserName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="#30ffffff"
         android:hint="@string/tv_user_name"
         android:inputType="text"
         android:textStyle="bold"
         android:textColor="@color/black"
         android:layout_below="@id/tvPassword"
         android:padding="20dp"
+        android:layout_centerHorizontal="true"
         android:drawablePadding="20dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"

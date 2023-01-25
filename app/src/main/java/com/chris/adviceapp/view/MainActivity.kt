@@ -20,7 +20,6 @@ import com.chris.adviceapp.database.models.Advice
 import com.chris.adviceapp.databinding.ActivityMainBinding
 import com.chris.adviceapp.repository.AdviceRepository
 import com.chris.adviceapp.util.AdviceState
-import com.chris.adviceapp.view.SignUpActivity.Companion.USER_NAME
 import com.chris.adviceapp.viewmodel.AdviceDatabaseViewModel
 import com.chris.adviceapp.viewmodel.AdviceDatabaseViewModelFactory
 import com.chris.adviceapp.viewmodel.AdviceViewModel
@@ -29,7 +28,6 @@ import com.facebook.login.LoginManager
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import java.text.SimpleDateFormat
 import java.util.*
@@ -45,14 +43,13 @@ class MainActivity : AppCompatActivity() {
     private lateinit var currentAdvice : String
     private val auth = FirebaseAuth.getInstance()
     private val user = auth.currentUser
-    private lateinit var databaseRef: DatabaseReference
+    private val databaseRef = FirebaseDatabase.getInstance().getReference("/users/${user?.uid}")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         this.binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(this.binding.root)
 
-        getUserName()
         setupActionBar()
         setupViewModel()
         viewModel.getAdvice()
@@ -63,11 +60,6 @@ class MainActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         viewModel.getAdvice()
-    }
-
-    private fun getUserName() {
-        val userName = intent.getStringExtra(USER_NAME)
-        databaseRef = FirebaseDatabase.getInstance().getReference("/users/$userName")
     }
 
     private fun handleAdvices() = lifecycleScope.launchWhenCreated{

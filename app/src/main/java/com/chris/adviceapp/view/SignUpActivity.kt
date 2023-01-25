@@ -20,7 +20,6 @@ import java.util.*
 
 class SignUpActivity : AppCompatActivity() {
 
-    private val auth: FirebaseAuth = FirebaseAuth.getInstance()
     private lateinit var binding: ActivitySignUpBinding
     private var imageUri : Uri? = null
     val database = FirebaseDatabase.getInstance()
@@ -52,12 +51,12 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     private fun signUpWithFirebase(userEmail: String, password: String) {
+        val auth: FirebaseAuth = FirebaseAuth.getInstance()
         auth.createUserWithEmailAndPassword(userEmail, password).
         addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 Toast.makeText(applicationContext,getString(R.string.signup_successful),
                     Toast.LENGTH_LONG).show()
-                finish()
             } else {
                 Toast.makeText(applicationContext,task.exception?.toString(),
                     Toast.LENGTH_LONG).show()
@@ -85,13 +84,21 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     private fun saveUserToFirebaseDatabase(url: String) {
-        val uid = FirebaseAuth.getInstance().uid ?: ""
         val userName = binding.tvUserName.text.toString()
         val userEmail = binding.tvUserEmail.text.toString()
-        val ref = FirebaseDatabase.getInstance().getReference("/users/$userName")
-        val user = User(uid, userName, userEmail, url)
+        val auth: FirebaseAuth = FirebaseAuth.getInstance()
+        val user = auth.currentUser
+        val ref = FirebaseDatabase.getInstance().getReference("/users/${user?.uid}")
+        val userCreated = User(userName, userEmail, url)
 
-        ref.setValue(user)
+        ref.setValue(userCreated)
+        val intent = Intent(applicationContext, MainActivity::class.java)
+        finish()
+        startActivity(intent)
+        Toast.makeText(
+            applicationContext, getString(R.string.toast_username_uploaded),
+            Toast.LENGTH_LONG
+        ).show()
     }
 
     private fun setButtonClickListener() {
@@ -113,13 +120,6 @@ class SignUpActivity : AppCompatActivity() {
             } else {
                 signUpWithFirebase(userEmail, password)
                 uploadImageToFirebaseStorage()
-                val intent = Intent(applicationContext, MainActivity::class.java).putExtra(USER_NAME, userName)
-                finish()
-                startActivity(intent)
-                Toast.makeText(
-                    applicationContext, getString(R.string.toast_user_created),
-                    Toast.LENGTH_LONG
-                ).show()
             }
         }
 
@@ -137,9 +137,4 @@ class SignUpActivity : AppCompatActivity() {
             chooseImage()
         }
     }
-
-    companion object {
-        const val USER_NAME = "userName"
-    }
-
 }

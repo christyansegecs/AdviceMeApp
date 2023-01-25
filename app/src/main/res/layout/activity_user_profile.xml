@@ -34,16 +34,18 @@
         android:id="@+id/tvChangeImageUser"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:text="@string/tv_change_user_image"
+        android:textColor="@color/white"
+        android:textColorHint="@color/white"
         android:layout_below="@id/ivUserProfile"
         android:layout_centerHorizontal="true"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
-        android:layout_marginBottom="10dp"
-        android:gravity="center"
-        android:text="@string/tv_change_user_image"
-        android:textColor="@color/white"
-        android:textColorHint="@color/white" />
+        android:layout_marginBottom="10dp" />
 
     <TextView
         android:id="@+id/tvUserName"
@@ -56,19 +58,48 @@
         android:textSize="20sp"
         android:textStyle="bold" />
 
+    <EditText
+        android:id="@+id/editUserName"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvChangeImageUser"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textColorHint="@color/white"
+        android:hint="@string/edit_new_username"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone"
+        android:inputType="text" />
+
+    <ImageView
+        android:id="@+id/icCheck"
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_check"
+        app:tint="#e0e0e0"
+        android:layout_alignEnd="@+id/editUserName"
+        android:layout_below="@id/tvChangeImageUser"
+        android:visibility="gone"
+        android:contentDescription="@string/apply_new_username" />
+
     <TextView
         android:id="@+id/tvChangeUserName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tvUserName"
-        android:layout_centerHorizontal="true"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="10dp"
+        android:clickable="true"
+        android:focusable="true"
         android:gravity="center"
         android:text="@string/tv_change_user_name"
         android:textColor="@color/white"
-        android:textColorHint="@color/white" />
+        android:textColorHint="@color/white"
+        android:layout_below="@id/tvUserName"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp" />
 
 </RelativeLayout>

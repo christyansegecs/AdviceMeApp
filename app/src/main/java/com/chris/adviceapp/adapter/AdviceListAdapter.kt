@@ -26,6 +26,8 @@ class AdviceListAdapter(
     private val allAdvices = ArrayList<Advice>()
     private val auth = FirebaseAuth.getInstance()
     private val user = auth.currentUser
+    private val databaseRef = FirebaseDatabase.getInstance().getReference("/users/${user?.uid}/profileImageUrl")
+
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
         val tvAdvice = itemView.findViewById<TextView>(R.id.tvAdviceDaRV)
         val icDelete = itemView.findViewById<ImageView>(R.id.icDelete)
@@ -40,8 +42,7 @@ class AdviceListAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val ref = FirebaseDatabase.getInstance().getReference("/users/profileImageUrl")
-        ref.addListenerForSingleValueEvent(object: ValueEventListener {
+        databaseRef.addListenerForSingleValueEvent(object: ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val imageString = snapshot.value.toString()
                 Picasso.get().load(imageString).rotate(90F).transform(CropCircleTransformation()).into(holder.ivUser)
@@ -51,7 +52,7 @@ class AdviceListAdapter(
                 Log.d("snapshot", "something went wrong")
             }
         })
-        holder.tvAdvice.text = "${allAdvices[position].id} - ${allAdvices[position].advice}"
+        holder.tvAdvice.text = "${position+1} - ${allAdvices[position].advice}"
         holder.tvDate.text = allAdvices[position].date
         holder.tvUser.text = "${user?.email}"
         holder.icDelete.setOnClickListener{
