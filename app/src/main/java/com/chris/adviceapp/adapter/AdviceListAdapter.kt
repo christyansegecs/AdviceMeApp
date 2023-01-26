@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.chris.adviceapp.R
 import com.chris.adviceapp.database.models.Advice
+import com.chris.adviceapp.view.UserProfileActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -26,7 +27,7 @@ class AdviceListAdapter(
     private val allAdvices = ArrayList<Advice>()
     private val auth = FirebaseAuth.getInstance()
     private val user = auth.currentUser
-    private val databaseRef = FirebaseDatabase.getInstance().getReference("/users/${user?.uid}/profileImageUrl")
+    private val databaseRef = FirebaseDatabase.getInstance().getReference("users/${user?.uid}/profileImageUrl")
 
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
         val tvAdvice = itemView.findViewById<TextView>(R.id.tvAdviceDaRV)
@@ -44,9 +45,13 @@ class AdviceListAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         databaseRef.addListenerForSingleValueEvent(object: ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                val imageString = snapshot.value.toString()
-                Picasso.get().load(imageString).rotate(90F).transform(CropCircleTransformation()).into(holder.ivUser)
-
+                if (snapshot.value.toString() == UserProfileActivity.URL_PICTURE_DEFAULT) {
+                    val imageString = snapshot.value.toString()
+                    Picasso.get().load(imageString).transform(CropCircleTransformation()).into(holder.ivUser)
+                } else {
+                    val imageString = snapshot.value.toString()
+                    Picasso.get().load(imageString).rotate(90F).transform(CropCircleTransformation()).into(holder.ivUser)
+                }
             }
             override fun onCancelled(error: DatabaseError) {
                 Log.d("snapshot", "something went wrong")

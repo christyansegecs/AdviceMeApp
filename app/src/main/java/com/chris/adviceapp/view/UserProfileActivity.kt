@@ -24,8 +24,8 @@ class UserProfileActivity  : AppCompatActivity() {
     private lateinit var binding: ActivityUserProfileBinding
     val auth = FirebaseAuth.getInstance()
     val user = auth.currentUser
-    val databaseUserPictureRef = FirebaseDatabase.getInstance().getReference("/users/${user?.uid}/profileImageUrl")
-    val databaseUserNameRef = FirebaseDatabase.getInstance().getReference("/users/${user?.uid}/userName")
+    private val databaseUserPictureRef = FirebaseDatabase.getInstance().getReference("users/${user?.uid}/profileImageUrl")
+    private val databaseUserNameRef = FirebaseDatabase.getInstance().getReference("users/${user?.uid}/userName")
     private var imageUri : Uri? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,7 +41,11 @@ class UserProfileActivity  : AppCompatActivity() {
     private fun fetchUserProfilePicture() {
         databaseUserPictureRef.addListenerForSingleValueEvent(object: ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                Picasso.get().load(snapshot.value.toString()).rotate(90F).into(binding.ivUserProfile)
+                if (snapshot.value.toString() == URL_PICTURE_DEFAULT) {
+                    Picasso.get().load(snapshot.value.toString()).into(binding.ivUserProfile)
+                } else {
+                    Picasso.get().load(snapshot.value.toString()).rotate(90F).into(binding.ivUserProfile)
+                }
             }
             override fun onCancelled(error: DatabaseError) {
                 Log.d("snapshot", "something went wrong")
@@ -71,7 +75,7 @@ class UserProfileActivity  : AppCompatActivity() {
         binding.icCheck.setOnClickListener{
             val newUserName = binding.editUserName.text.toString()
             binding.tvUserName.text = newUserName
-            val ref = FirebaseDatabase.getInstance().getReference("/users/${user?.uid}/userName")
+            val ref = FirebaseDatabase.getInstance().getReference("users/${user?.uid}/userName")
             ref.setValue(newUserName)
             changeViewVisibility()
             Toast.makeText(
@@ -119,7 +123,7 @@ class UserProfileActivity  : AppCompatActivity() {
     }
 
     private fun updateImageDatabase(url: String) {
-        val ref = FirebaseDatabase.getInstance().getReference("/users/${user?.uid}/profileImageUrl")
+        val ref = FirebaseDatabase.getInstance().getReference("users/${user?.uid}/profileImageUrl")
         ref.setValue(url)
         Toast.makeText(
             applicationContext, getString(R.string.toast_picture_uploaded),
@@ -137,5 +141,9 @@ class UserProfileActivity  : AppCompatActivity() {
         binding.editUserName.isVisible = false
         binding.icCheck.isVisible = false
         binding.tvUserName.isVisible = true
+    }
+
+    companion object {
+        const val URL_PICTURE_DEFAULT = "http://www.univates.br/roau/download/147/calvin/calvin.jpg"
     }
 }

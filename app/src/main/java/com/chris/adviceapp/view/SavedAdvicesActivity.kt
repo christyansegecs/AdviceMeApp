@@ -28,7 +28,6 @@ import com.google.firebase.database.ValueEventListener
 import java.text.SimpleDateFormat
 import java.util.*
 
-
 class SavedAdvicesActivity : AppCompatActivity(), NoteClickDeleteInterface {
 
     private lateinit var recyclerView: RecyclerView
@@ -38,8 +37,8 @@ class SavedAdvicesActivity : AppCompatActivity(), NoteClickDeleteInterface {
         AdviceDatabaseViewModelFactory((application as AdviceApplication).repository)
     }
     val auth = FirebaseAuth.getInstance()
-    val user = auth.currentUser
-    val databaseAdvicesRef = FirebaseDatabase.getInstance().getReference("/users/${user?.uid}/Advices")
+    private val user = auth.currentUser
+    private val databaseAdvicesRef = FirebaseDatabase.getInstance().getReference("users/${user?.uid}/Advices")
     val allAdvices = ArrayList<Advice>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -71,10 +70,8 @@ class SavedAdvicesActivity : AppCompatActivity(), NoteClickDeleteInterface {
                 snapshot.children.forEach {
                     Log.d("NewAdvice", it.toString())
                     val advice = it.value.toString()
-                    if (advice != null) {
-                        allAdvices.add(Advice(advice, currentDate))
-                        adapter.updateList(allAdvices)
-                    }
+                    allAdvices.add(Advice(advice, currentDate))
+                    adapter.updateList(allAdvices)
                 }
             }
             override fun onCancelled(error: DatabaseError) {}

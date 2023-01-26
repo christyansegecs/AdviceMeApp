@@ -55,6 +55,7 @@ class SignUpActivity : AppCompatActivity() {
         auth.createUserWithEmailAndPassword(userEmail, password).
         addOnCompleteListener { task ->
             if (task.isSuccessful) {
+                uploadImageToFirebaseStorage()
                 Toast.makeText(applicationContext,getString(R.string.signup_successful),
                     Toast.LENGTH_LONG).show()
             } else {
@@ -65,40 +66,39 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     private fun uploadImageToFirebaseStorage() {
-        if (imageUri == null) return
-        val filename = UUID.randomUUID().toString()
-        val imageReference = FirebaseStorage.getInstance().getReference("/images/$filename")
+        if (imageUri == null) {
+            imageUri = Uri.parse("http://www.univates.br/roau/download/147/calvin/calvin.jpg")
+            saveUserToFirebaseDatabase(imageUri.toString())
+        } else {
+            val filename = UUID.randomUUID().toString()
+            val imageReference = FirebaseStorage.getInstance().getReference("/images/$filename")
+            imageReference.putFile(imageUri!!)
+                .addOnSuccessListener {
+                    Log.d("firebase", "Successfully uploaded image: ${it.metadata?.path}")
 
-        imageReference.putFile(imageUri!!)
-            .addOnSuccessListener {
-                Log.d("firebase", "Successfully uploaded image: ${it.metadata?.path}")
-
-                imageReference.downloadUrl.addOnSuccessListener {
-                    Log.d("firebase", "File Location: $it")
-                    saveUserToFirebaseDatabase(it.toString())
+                    imageReference.downloadUrl.addOnSuccessListener {
+                        Log.d("firebase", "File Location: $it")
+                        saveUserToFirebaseDatabase(it.toString())
+                    }
                 }
-            }
-            .addOnFailureListener {
-                Log.d("firebase", "Failed to upload image to storage: ${it.message}")
-            }
+                .addOnFailureListener {
+                    Log.d("firebase", "Failed to upload image to storage: ${it.message}")
+                }
+        }
     }
 
     private fun saveUserToFirebaseDatabase(url: String) {
         val userName = binding.tvUserName.text.toString()
         val userEmail = binding.tvUserEmail.text.toString()
-        val auth: FirebaseAuth = FirebaseAuth.getInstance()
+        val auth = FirebaseAuth.getInstance()
         val user = auth.currentUser
-        val ref = FirebaseDatabase.getInstance().getReference("/users/${user?.uid}")
+        Log.d("authentication", user?.uid.toString())
+        val ref = FirebaseDatabase.getInstance().getReference("users/${user?.uid}")
         val userCreated = User(userName, userEmail, url)
-
         ref.setValue(userCreated)
         val intent = Intent(applicationContext, MainActivity::class.java)
-        finish()
         startActivity(intent)
-        Toast.makeText(
-            applicationContext, getString(R.string.toast_username_uploaded),
-            Toast.LENGTH_LONG
-        ).show()
+        finish()
     }
 
     private fun setButtonClickListener() {
@@ -119,7 +119,6 @@ class SignUpActivity : AppCompatActivity() {
                 binding.tvUserName.requestFocus()
             } else {
                 signUpWithFirebase(userEmail, password)
-                uploadImageToFirebaseStorage()
             }
         }
 
