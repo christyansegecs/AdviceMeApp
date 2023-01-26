@@ -54,7 +54,6 @@ class SavedAdvicesActivity : AppCompatActivity(), NoteClickDeleteInterface {
 
         setupActionBar()
         fetchAdvicesFromDatabase()
-
 //        adviceDatabaseViewModel.allAdvices.observe(this) { list ->
 //            list?.let {
 //                adapter.updateList(it)

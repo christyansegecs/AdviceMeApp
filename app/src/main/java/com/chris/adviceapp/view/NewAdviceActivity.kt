@@ -2,14 +2,9 @@ package com.chris.adviceapp.view
 
 import android.os.Bundle
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import com.chris.adviceapp.AdviceApplication
 import com.chris.adviceapp.R
-import com.chris.adviceapp.database.models.Advice
 import com.chris.adviceapp.databinding.ActivityNewAdviceBinding
-import com.chris.adviceapp.viewmodel.AdviceDatabaseViewModel
-import com.chris.adviceapp.viewmodel.AdviceDatabaseViewModelFactory
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import java.text.SimpleDateFormat
@@ -21,9 +16,9 @@ class NewAdviceActivity : AppCompatActivity()  {
     private val auth = FirebaseAuth.getInstance()
     private val user = auth.currentUser
     private val databaseRef = FirebaseDatabase.getInstance().getReference("/users/${user?.uid}")
-    private val viewModelDB: AdviceDatabaseViewModel by viewModels {
-        AdviceDatabaseViewModelFactory((application as AdviceApplication).repository)
-    }
+//    private val viewModelDB: AdviceDatabaseViewModel by viewModels {
+//        AdviceDatabaseViewModelFactory((application as AdviceApplication).repository)
+//    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,8 +30,8 @@ class NewAdviceActivity : AppCompatActivity()  {
         binding.btnNewAdvice.setOnClickListener {
             val sdf = SimpleDateFormat("MMM dd,yyyy")
             val currentDate: String = sdf.format(Date())
-            viewModelDB.insert(Advice(newAdvice.toString(), currentDate))
-            databaseRef.child("Advices").push().setValue(Advice(newAdvice.toString(), currentDate))
+//            viewModelDB.insert(Advice(newAdvice.toString(), currentDate))
+            databaseRef.child("Advices").push().setValue(newAdvice.toString(), currentDate)
             Toast.makeText(this, getString(R.string.toast_new_advice) , Toast.LENGTH_SHORT).show()
             finish()
         }
