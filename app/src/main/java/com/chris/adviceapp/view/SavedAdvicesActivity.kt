@@ -10,6 +10,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.MenuProvider
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.chris.adviceapp.AdviceApplication
@@ -61,6 +62,22 @@ class SavedAdvicesActivity : AppCompatActivity(), NoteClickDeleteInterface {
 //        }
     }
 
+
+    private fun checkIfIsAnyAdviceSaved() {
+        if (allAdvices.isEmpty()) {
+            with(binding) {
+                rvAdvice.isVisible = false
+                tvNoAdvicesYet.isVisible = true
+            }
+        }
+        else {
+            with(binding) {
+                rvAdvice.isVisible = true
+                tvNoAdvicesYet.isVisible = false
+            }
+        }
+    }
+
     private fun fetchAdvicesFromDatabase() {
         val sdf = SimpleDateFormat("MMM dd,yyyy")
         val currentDate: String = sdf.format(Date())
@@ -72,6 +89,7 @@ class SavedAdvicesActivity : AppCompatActivity(), NoteClickDeleteInterface {
                     allAdvices.add(Advice(advice, currentDate))
                     adapter.updateList(allAdvices)
                 }
+                checkIfIsAnyAdviceSaved()
             }
             override fun onCancelled(error: DatabaseError) {}
         })

@@ -75,4 +75,5 @@
     <string name="ic_hide_password">hide password</string>
     <string name="edit_new_username">New Username</string>
     <string name="apply_new_username">Apply New Username</string>
+    <string name="tv_no_advices_yet">You don\'t have any saved Advices to show yet</string>
 </resources>
