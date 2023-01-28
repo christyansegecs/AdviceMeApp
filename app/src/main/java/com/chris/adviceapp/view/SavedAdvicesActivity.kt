@@ -38,7 +38,6 @@ class SavedAdvicesActivity : AppCompatActivity(), NoteClickDeleteInterface {
     val auth = FirebaseAuth.getInstance()
     private val user = auth.currentUser
     private val databaseAdvicesRef = FirebaseDatabase.getInstance().getReference("users/${user?.uid}/Advices")
-    private val databaseRemoveAdvicesRef = FirebaseDatabase.getInstance().getReference("users/${user?.uid}/Advices")
     val allAdvices = ArrayList<String>()
     val allAdvicesDates = ArrayList<String>()
 
@@ -55,11 +54,6 @@ class SavedAdvicesActivity : AppCompatActivity(), NoteClickDeleteInterface {
 
         setupActionBar()
         fetchAdvicesFromDatabase()
-//        adviceDatabaseViewModel.allAdvices.observe(this) { list ->
-//            list?.let {
-//                adapter.updateList(it)
-//            }
-//        }
     }
 
     private fun checkIfIsAnyAdviceSaved() {
@@ -100,10 +94,10 @@ class SavedAdvicesActivity : AppCompatActivity(), NoteClickDeleteInterface {
             .setTitle(getString(R.string.dialog_delete_advice))
             .setPositiveButton(getString(R.string.alert_dialog_logout_positive)) { _, _ ->
 
-                val query = databaseRemoveAdvicesRef.orderByChild("advice").equalTo(advice.toString())
+                val query = databaseAdvicesRef.orderByChild("advice").equalTo(advice.toString())
                 query.addListenerForSingleValueEvent(object: ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
-                        databaseRemoveAdvicesRef.removeValue()
+                        databaseAdvicesRef.removeValue()
                         allAdvices.remove(advice.advice)
                         adapter.updateList(allAdvices)
                         allAdvicesDates.remove(advice.date)
@@ -138,7 +132,16 @@ class SavedAdvicesActivity : AppCompatActivity(), NoteClickDeleteInterface {
         val dialog = AlertDialog.Builder(this)
             .setTitle(getString(R.string.dialog_delete_all_advices))
             .setPositiveButton(getString(R.string.alert_dialog_logout_positive)) { _, _ ->
-                adviceDatabaseViewModel.deleteAll()
+                databaseAdvicesRef.addListenerForSingleValueEvent(object: ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        databaseAdvicesRef.removeValue()
+                        allAdvices.clear()
+                        adapter.updateList(allAdvices)
+                        allAdvicesDates.clear()
+                        adapter.updateDateList(allAdvicesDates)
+                    }
+                    override fun onCancelled(error: DatabaseError) {}
+                })
                 Toast.makeText(this,getString(R.string.toast_delete_all), Toast.LENGTH_SHORT).show()
             }
             .setNegativeButton(getString(R.string.alert_dialog_logout_negative)) { _, _ ->
