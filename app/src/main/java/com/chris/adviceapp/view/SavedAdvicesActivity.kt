@@ -18,6 +18,7 @@ import com.chris.adviceapp.adapter.AdviceListAdapter
 import com.chris.adviceapp.adapter.NoteClickDeleteInterface
 import com.chris.adviceapp.database.models.Advice
 import com.chris.adviceapp.databinding.ActivitySavedAdvicesBinding
+import com.chris.adviceapp.usermodel.AdviceFirebase
 import com.chris.adviceapp.viewmodel.AdviceDatabaseViewModel
 import com.chris.adviceapp.viewmodel.AdviceDatabaseViewModelFactory
 import com.google.firebase.auth.FirebaseAuth
@@ -37,6 +38,7 @@ class SavedAdvicesActivity : AppCompatActivity(), NoteClickDeleteInterface {
     val auth = FirebaseAuth.getInstance()
     private val user = auth.currentUser
     private val databaseAdvicesRef = FirebaseDatabase.getInstance().getReference("users/${user?.uid}/Advices")
+    private val databaseRemoveAdvicesRef = FirebaseDatabase.getInstance().getReference("users/${user?.uid}/Advices")
     val allAdvices = ArrayList<String>()
     val allAdvicesDates = ArrayList<String>()
 
@@ -92,12 +94,23 @@ class SavedAdvicesActivity : AppCompatActivity(), NoteClickDeleteInterface {
         })
     }
 
-    override fun onDeleteIconClick(advice: Advice) {
+    override fun onDeleteIconClick(advice: AdviceFirebase) {
 
         val dialog = AlertDialog.Builder(this)
             .setTitle(getString(R.string.dialog_delete_advice))
             .setPositiveButton(getString(R.string.alert_dialog_logout_positive)) { _, _ ->
-                adviceDatabaseViewModel.delete(advice)
+
+                val query = databaseRemoveAdvicesRef.orderByChild("advice").equalTo(advice.toString())
+                query.addListenerForSingleValueEvent(object: ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        databaseRemoveAdvicesRef.removeValue()
+                        allAdvices.remove(advice.advice)
+                        adapter.updateList(allAdvices)
+                        allAdvicesDates.remove(advice.date)
+                        adapter.updateDateList(allAdvicesDates)
+                    }
+                    override fun onCancelled(error: DatabaseError) {}
+                })
                 Toast.makeText(this,"${advice.advice} ${getString(R.string.toast_delete_advice)}", Toast.LENGTH_SHORT).show()
             }
             .setNegativeButton(getString(R.string.alert_dialog_logout_negative)) { _, _ ->

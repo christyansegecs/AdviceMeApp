@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.chris.adviceapp.R
 import com.chris.adviceapp.database.models.Advice
+import com.chris.adviceapp.usermodel.AdviceFirebase
 import com.chris.adviceapp.view.UserProfileActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -62,7 +63,7 @@ class AdviceListAdapter(
         holder.tvDate.text = allAdvicesDates[position]
         holder.tvUser.text = "${user?.email}"
         holder.icDelete.setOnClickListener{
-//            noteClickDeleteInterface.onDeleteIconClick(allAdvices[position])
+            noteClickDeleteInterface.onDeleteIconClick(AdviceFirebase(allAdvices[position],allAdvicesDates[position]))
         }
     }
 
@@ -84,5 +85,5 @@ class AdviceListAdapter(
 }
 
 interface  NoteClickDeleteInterface{
-    fun onDeleteIconClick(advice: Advice)
+    fun onDeleteIconClick(advice: AdviceFirebase)
 }
