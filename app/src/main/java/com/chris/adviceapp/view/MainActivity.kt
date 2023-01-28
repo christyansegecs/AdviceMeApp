@@ -16,9 +16,9 @@ import androidx.lifecycle.lifecycleScope
 import com.chris.adviceapp.AdviceApplication
 import com.chris.adviceapp.R
 import com.chris.adviceapp.api.AdviceService
-import com.chris.adviceapp.database.models.Advice
 import com.chris.adviceapp.databinding.ActivityMainBinding
 import com.chris.adviceapp.repository.AdviceRepository
+import com.chris.adviceapp.usermodel.AdviceFirebase
 import com.chris.adviceapp.util.AdviceState
 import com.chris.adviceapp.viewmodel.AdviceDatabaseViewModel
 import com.chris.adviceapp.viewmodel.AdviceDatabaseViewModelFactory
@@ -116,8 +116,9 @@ class MainActivity : AppCompatActivity() {
         binding.btnSaveAdvice.setOnClickListener {
             val sdf = SimpleDateFormat("MMM dd,yyyy")
             val currentDate: String = sdf.format(Date())
-            viewModelDB.insert(Advice(currentAdvice, currentDate))
-            databaseRef.child("Advices").push().setValue(currentAdvice)
+//            viewModelDB.insert(Advice(currentAdvice, currentDate))
+            val adviceSaved = AdviceFirebase(currentAdvice, currentDate)
+            databaseRef.child("Advices").push().setValue(adviceSaved)
         }
 
         binding.btnList.setOnClickListener {

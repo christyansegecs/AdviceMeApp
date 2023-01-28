@@ -5,6 +5,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.chris.adviceapp.R
 import com.chris.adviceapp.databinding.ActivityNewAdviceBinding
+import com.chris.adviceapp.usermodel.AdviceFirebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import java.text.SimpleDateFormat
@@ -31,7 +32,7 @@ class NewAdviceActivity : AppCompatActivity()  {
             val sdf = SimpleDateFormat("MMM dd,yyyy")
             val currentDate: String = sdf.format(Date())
 //            viewModelDB.insert(Advice(newAdvice.toString(), currentDate))
-            databaseRef.child("Advices").push().setValue(newAdvice.toString(), currentDate)
+            databaseRef.child("Advices").push().setValue(AdviceFirebase(newAdvice.toString(), currentDate))
             Toast.makeText(this, getString(R.string.toast_new_advice) , Toast.LENGTH_SHORT).show()
             finish()
         }

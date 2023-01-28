@@ -24,7 +24,8 @@ class AdviceListAdapter(
     private val noteClickDeleteInterface: NoteClickDeleteInterface
 ) : RecyclerView.Adapter<AdviceListAdapter.ViewHolder>() {
 
-    private val allAdvices = ArrayList<Advice>()
+    private val allAdvices = ArrayList<String>()
+    private val allAdvicesDates = ArrayList<String>()
     private val auth = FirebaseAuth.getInstance()
     private val user = auth.currentUser
     private val databaseRef = FirebaseDatabase.getInstance().getReference("users/${user?.uid}/profileImageUrl")
@@ -57,11 +58,11 @@ class AdviceListAdapter(
                 Log.d("snapshot", "something went wrong")
             }
         })
-        holder.tvAdvice.text = "${position+1} - ${allAdvices[position].advice}"
-        holder.tvDate.text = allAdvices[position].date
+        holder.tvAdvice.text = "${position+1} - ${allAdvices[position]}"
+        holder.tvDate.text = allAdvicesDates[position]
         holder.tvUser.text = "${user?.email}"
         holder.icDelete.setOnClickListener{
-            noteClickDeleteInterface.onDeleteIconClick(allAdvices[position])
+//            noteClickDeleteInterface.onDeleteIconClick(allAdvices[position])
         }
     }
 
@@ -69,9 +70,15 @@ class AdviceListAdapter(
         return allAdvices.size
     }
 
-    fun updateList(newList: List<Advice>){
+    fun updateList(newList: List<String>){
         allAdvices.clear()
         allAdvices.addAll(newList)
+        notifyDataSetChanged()
+    }
+
+    fun updateDateList(newList: List<String>){
+        allAdvicesDates.clear()
+        allAdvicesDates.addAll(newList)
         notifyDataSetChanged()
     }
 }

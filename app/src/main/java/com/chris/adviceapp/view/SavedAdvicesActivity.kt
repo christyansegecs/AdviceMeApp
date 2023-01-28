@@ -1,7 +1,6 @@
 package com.chris.adviceapp.view
 
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -26,8 +25,6 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import java.text.SimpleDateFormat
-import java.util.*
 
 class SavedAdvicesActivity : AppCompatActivity(), NoteClickDeleteInterface {
 
@@ -40,7 +37,8 @@ class SavedAdvicesActivity : AppCompatActivity(), NoteClickDeleteInterface {
     val auth = FirebaseAuth.getInstance()
     private val user = auth.currentUser
     private val databaseAdvicesRef = FirebaseDatabase.getInstance().getReference("users/${user?.uid}/Advices")
-    val allAdvices = ArrayList<Advice>()
+    val allAdvices = ArrayList<String>()
+    val allAdvicesDates = ArrayList<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,7 +60,6 @@ class SavedAdvicesActivity : AppCompatActivity(), NoteClickDeleteInterface {
 //        }
     }
 
-
     private fun checkIfIsAnyAdviceSaved() {
         if (allAdvices.isEmpty()) {
             with(binding) {
@@ -79,15 +76,15 @@ class SavedAdvicesActivity : AppCompatActivity(), NoteClickDeleteInterface {
     }
 
     private fun fetchAdvicesFromDatabase() {
-        val sdf = SimpleDateFormat("MMM dd,yyyy")
-        val currentDate: String = sdf.format(Date())
         databaseAdvicesRef.addListenerForSingleValueEvent(object: ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                snapshot.children.forEach {
-                    Log.d("NewAdvice", it.toString())
-                    val advice = it.value.toString()
-                    allAdvices.add(Advice(advice, currentDate))
+                for(ds in snapshot.children) {
+                    val advice = ds.child("advice").value.toString()
+                    val date = ds.child("date").value.toString()
+                    allAdvices.add(advice)
                     adapter.updateList(allAdvices)
+                    allAdvicesDates.add(date)
+                    adapter.updateDateList(allAdvicesDates)
                 }
                 checkIfIsAnyAdviceSaved()
             }
@@ -110,11 +107,9 @@ class SavedAdvicesActivity : AppCompatActivity(), NoteClickDeleteInterface {
 
     private fun setupActionBar() {
         addMenuProvider(object : MenuProvider {
-
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 menuInflater.inflate(R.menu.menu_saved_advices, menu)
             }
-
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 when(menuItem.itemId) {
                     R.id.menu_delete -> {
