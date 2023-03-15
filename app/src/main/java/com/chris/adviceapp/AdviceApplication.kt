@@ -1,16 +1,18 @@
 package com.chris.adviceapp
 
 import android.app.Application
-import com.chris.adviceapp.database.AdviceRoomDatabase
-import com.chris.adviceapp.repository.AdviceDatabaseRepository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.SupervisorJob
+import com.chris.adviceapp.di.appModules
+import org.koin.core.context.startKoin
 
 class AdviceApplication : Application() {
 
-    val applicationScope = CoroutineScope(SupervisorJob())
+    override fun onCreate() {
+        super.onCreate()
 
-    val database by lazy { AdviceRoomDatabase.getDatabase(this) }
-    val repository by lazy { AdviceDatabaseRepository(database.adviceDao()) }
-
+        startKoin {
+            modules(
+                appModules
+            )
+        }
+    }
 }

@@ -9,7 +9,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.chris.adviceapp.R
-import com.chris.adviceapp.database.models.Advice
 import com.chris.adviceapp.usermodel.AdviceFirebase
 import com.chris.adviceapp.view.UserProfileActivity
 import com.google.firebase.auth.FirebaseAuth

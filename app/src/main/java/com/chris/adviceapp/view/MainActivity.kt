@@ -6,40 +6,29 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import com.chris.adviceapp.AdviceApplication
 import com.chris.adviceapp.R
-import com.chris.adviceapp.api.AdviceService
 import com.chris.adviceapp.databinding.ActivityMainBinding
-import com.chris.adviceapp.repository.AdviceRepository
 import com.chris.adviceapp.usermodel.AdviceFirebase
 import com.chris.adviceapp.util.AdviceState
-import com.chris.adviceapp.viewmodel.AdviceDatabaseViewModel
-import com.chris.adviceapp.viewmodel.AdviceDatabaseViewModelFactory
 import com.chris.adviceapp.viewmodel.AdviceViewModel
-import com.chris.adviceapp.viewmodel.AdviceViewModelFactory
 import com.facebook.login.LoginManager
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private val retrofitService = AdviceService.getInstance()
-    private lateinit var viewModel: AdviceViewModel
-    private val viewModelDB: AdviceDatabaseViewModel by viewModels {
-        AdviceDatabaseViewModelFactory((application as AdviceApplication).repository)
-    }
+    private val viewModel : AdviceViewModel by viewModel()
     private lateinit var currentAdvice : String
     private val auth = FirebaseAuth.getInstance()
     private val user = auth.currentUser
@@ -51,7 +40,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(this.binding.root)
 
         setupActionBar()
-        setupViewModel()
         viewModel.getAdvice()
         handleAdvices()
         setupClickListener()
@@ -78,10 +66,6 @@ class MainActivity : AppCompatActivity() {
                 is AdviceState.Empty -> {}
             }
         }
-    }
-
-    private fun setupViewModel() {
-        viewModel = ViewModelProvider(this, AdviceViewModelFactory(AdviceRepository(retrofitService)))[AdviceViewModel::class.java]
     }
 
     private fun setupActionBar() {

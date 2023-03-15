@@ -5,22 +5,17 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.chris.adviceapp.AdviceApplication
 import com.chris.adviceapp.R
 import com.chris.adviceapp.adapter.AdviceListAdapter
 import com.chris.adviceapp.adapter.NoteClickDeleteInterface
-import com.chris.adviceapp.database.models.Advice
 import com.chris.adviceapp.databinding.ActivitySavedAdvicesBinding
 import com.chris.adviceapp.usermodel.AdviceFirebase
-import com.chris.adviceapp.viewmodel.AdviceDatabaseViewModel
-import com.chris.adviceapp.viewmodel.AdviceDatabaseViewModelFactory
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -32,9 +27,6 @@ class SavedAdvicesActivity : AppCompatActivity(), NoteClickDeleteInterface {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: AdviceListAdapter
     private lateinit var binding: ActivitySavedAdvicesBinding
-    private val adviceDatabaseViewModel : AdviceDatabaseViewModel by viewModels {
-        AdviceDatabaseViewModelFactory((application as AdviceApplication).repository)
-    }
     val auth = FirebaseAuth.getInstance()
     private val user = auth.currentUser
     private val databaseAdvicesRef = FirebaseDatabase.getInstance().getReference("users/${user?.uid}/Advices")

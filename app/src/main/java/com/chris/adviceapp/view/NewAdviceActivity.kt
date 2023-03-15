@@ -17,9 +17,6 @@ class NewAdviceActivity : AppCompatActivity()  {
     private val auth = FirebaseAuth.getInstance()
     private val user = auth.currentUser
     private val databaseRef = FirebaseDatabase.getInstance().getReference("/users/${user?.uid}")
-//    private val viewModelDB: AdviceDatabaseViewModel by viewModels {
-//        AdviceDatabaseViewModelFactory((application as AdviceApplication).repository)
-//    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +28,6 @@ class NewAdviceActivity : AppCompatActivity()  {
         binding.btnNewAdvice.setOnClickListener {
             val sdf = SimpleDateFormat("MMM dd,yyyy")
             val currentDate: String = sdf.format(Date())
-//            viewModelDB.insert(Advice(newAdvice.toString(), currentDate))
             databaseRef.child("Advices").push().setValue(AdviceFirebase(newAdvice.toString(), currentDate))
             Toast.makeText(this, getString(R.string.toast_new_advice) , Toast.LENGTH_SHORT).show()
             finish()
