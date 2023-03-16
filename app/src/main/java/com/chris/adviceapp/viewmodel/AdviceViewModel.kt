@@ -20,11 +20,8 @@ class AdviceViewModel(
     fun getAdvice() = viewModelScope.launch {
         repository.getAdvice()
             .onStart { adviceStateFlow.value = AdviceState.onLoading }
-            .catch { e ->
-                adviceStateFlow.value = AdviceState.onError(e)
-            }.collect{ data ->
-                adviceStateFlow.value = AdviceState.onSuccess(data)
-            }
+            .catch { e -> adviceStateFlow.value = AdviceState.onError(e) }
+            .collect{ data -> adviceStateFlow.value = AdviceState.onSuccess(data) }
     }
 
 }

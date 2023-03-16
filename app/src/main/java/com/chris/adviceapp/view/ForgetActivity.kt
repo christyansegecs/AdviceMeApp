@@ -5,19 +5,24 @@ import android.os.Bundle
 import android.widget.Toast
 import com.chris.adviceapp.R
 import com.chris.adviceapp.databinding.ActivityForgetBinding
-import com.google.firebase.auth.FirebaseAuth
+import com.chris.adviceapp.viewmodel.FirebaseViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ForgetActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityForgetBinding
-    private val auth: FirebaseAuth = FirebaseAuth.getInstance()
+    private val firebaseViewModel : FirebaseViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         this.binding = ActivityForgetBinding.inflate(layoutInflater)
         setContentView(this.binding.root)
+        firebaseViewModel.getCurrentUser()
+        setupClickListener()
+    }
 
+    private fun setupClickListener() {
         binding.btnReset.setOnClickListener {
             val email = binding.tvForget.text.toString()
 
@@ -25,15 +30,11 @@ class ForgetActivity : AppCompatActivity() {
                 binding.tvForget.error = getString(R.string.error_input_email)
                 binding.tvForget.requestFocus()
             } else {
-                auth.sendPasswordResetEmail(email).addOnCompleteListener {
-                        task ->
-                    if (task.isSuccessful) {
-                        Toast.makeText(applicationContext,
-                            getString(R.string.toast_sent_password),
-                            Toast.LENGTH_SHORT).show()
-                        finish()
-                    }
-                }
+                firebaseViewModel.sendNewPasswordToEmail(email)
+                Toast.makeText(applicationContext,
+                    getString(R.string.toast_sent_password),
+                    Toast.LENGTH_SHORT).show()
+                finish()
             }
         }
     }

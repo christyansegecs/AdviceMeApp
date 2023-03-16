@@ -16,11 +16,11 @@ import com.chris.adviceapp.databinding.ActivityMainBinding
 import com.chris.adviceapp.usermodel.AdviceFirebase
 import com.chris.adviceapp.util.AdviceState
 import com.chris.adviceapp.viewmodel.AdviceViewModel
+import com.chris.adviceapp.viewmodel.FirebaseViewModel
 import com.facebook.login.LoginManager
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.FirebaseDatabase
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.SimpleDateFormat
 import java.util.*
@@ -28,11 +28,9 @@ import java.util.*
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private val viewModel : AdviceViewModel by viewModel()
+    private val adviceViewModel : AdviceViewModel by viewModel()
+    private val firebaseViewModel : FirebaseViewModel by viewModel()
     private lateinit var currentAdvice : String
-    private val auth = FirebaseAuth.getInstance()
-    private val user = auth.currentUser
-    private val databaseRef = FirebaseDatabase.getInstance().getReference("/users/${user?.uid}")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,18 +38,14 @@ class MainActivity : AppCompatActivity() {
         setContentView(this.binding.root)
 
         setupActionBar()
-        viewModel.getAdvice()
+        adviceViewModel.getAdvice()
         handleAdvices()
         setupClickListener()
-    }
-
-    override fun onStart() {
-        super.onStart()
-        viewModel.getAdvice()
+        firebaseViewModel.getCurrentUser()
     }
 
     private fun handleAdvices() = lifecycleScope.launchWhenCreated{
-        viewModel._adviceStateFlow.collect {
+        adviceViewModel._adviceStateFlow.collect {
             when(it) {
                 is AdviceState.onLoading -> { binding.progressBar.isVisible=true }
                 is AdviceState.onError -> {
@@ -95,14 +89,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupClickListener() {
-        binding.btnNewAdvice.setOnClickListener { viewModel.getAdvice() }
+        binding.btnNewAdvice.setOnClickListener { adviceViewModel.getAdvice() }
 
         binding.btnSaveAdvice.setOnClickListener {
             val sdf = SimpleDateFormat("MMM dd,yyyy")
             val currentDate: String = sdf.format(Date())
-//            viewModelDB.insert(Advice(currentAdvice, currentDate))
             val adviceSaved = AdviceFirebase(currentAdvice, currentDate)
-            databaseRef.child("Advices").push().setValue(adviceSaved)
+            firebaseViewModel.getCurrentUser()
+            firebaseViewModel.saveAdvice(adviceSaved)
         }
 
         binding.btnList.setOnClickListener {

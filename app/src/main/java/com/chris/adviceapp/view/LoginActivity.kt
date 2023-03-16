@@ -11,8 +11,11 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.lifecycleScope
 import com.chris.adviceapp.R
 import com.chris.adviceapp.databinding.ActivityLoginBinding
+import com.chris.adviceapp.util.AuthState
+import com.chris.adviceapp.viewmodel.FirebaseViewModel
 import com.facebook.AccessToken
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
@@ -30,11 +33,13 @@ import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.OAuthProvider
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.Arrays
 
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
+    private val firebaseViewModel : FirebaseViewModel by viewModel()
     private lateinit var googleSignInClient: GoogleSignInClient
     private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
     private var callbackManager: CallbackManager? = null
@@ -49,39 +54,42 @@ class LoginActivity : AppCompatActivity() {
 
         setButtonClickListener()
         registerActivityForGoogleSignIn()
+        handleAuthentication()
     }
 
-    // Remember User Login
     override fun onStart() {
         super.onStart()
-
-        val user = auth.currentUser
-        if (user != null) {
-
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
-            finish()
-
+        firebaseViewModel.currentUserLiveData.observe(this) { user ->
+            if (user != null) {
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
         }
+        firebaseViewModel.getCurrentUser()
     }
 
-    private fun loginWithEmailAndPassword(userEmail: String, password: String) {
-        auth.signInWithEmailAndPassword(userEmail, password)
-            .addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) {
-                    Toast.makeText(
-                        applicationContext, getString(R.string.login_successful),
-                        Toast.LENGTH_LONG
-                    ).show()
-                    val intent = Intent(this, MainActivity::class.java)
+    private fun signIn(userEmail: String, password: String) {
+        firebaseViewModel.signIn(userEmail, password)
+    }
+
+    private fun handleAuthentication() = lifecycleScope.launchWhenCreated{
+        firebaseViewModel._authStateFlow.collect {
+            when(it) {
+                is AuthState.onLoading -> {  }
+                is AuthState.onError -> { Toast.makeText(
+                    applicationContext, getString(R.string.login_failed),
+                    Toast.LENGTH_LONG
+                ).show() }
+                is AuthState.onSuccess -> { val intent = Intent(this@LoginActivity, MainActivity::class.java)
                     startActivity(intent)
-                } else {
                     Toast.makeText(
-                        applicationContext, getString(R.string.login_failed),
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
+                    applicationContext, getString(R.string.login_successful),
+                    Toast.LENGTH_LONG
+                ).show() }
+                is AuthState.Empty -> { }
             }
+        }
     }
 
     private fun signInGoogle() {
@@ -91,10 +99,10 @@ class LoginActivity : AppCompatActivity() {
             .requestEmail()
             .build()
         googleSignInClient = GoogleSignIn.getClient(this, gso)
-        signIn()
+        signInWithGoogle()
     }
 
-    private fun signIn() {
+    private fun signInWithGoogle() {
         val signInIntent: Intent = googleSignInClient.signInIntent
         activityResultLauncher.launch(signInIntent)
     }
@@ -222,7 +230,7 @@ class LoginActivity : AppCompatActivity() {
                 binding.tvPassword.error = getString(R.string.error_input_your_password)
                 binding.tvPassword.requestFocus()
             } else {
-                loginWithEmailAndPassword(userEmail, password)
+                signIn(userEmail, password)
             }
         }
 

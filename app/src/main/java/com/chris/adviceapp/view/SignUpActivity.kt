@@ -12,17 +12,18 @@ import androidx.appcompat.app.AppCompatActivity
 import com.chris.adviceapp.R
 import com.chris.adviceapp.databinding.ActivitySignUpBinding
 import com.chris.adviceapp.usermodel.User
+import com.chris.adviceapp.viewmodel.FirebaseViewModel
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import com.squareup.picasso.Picasso
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 
 class SignUpActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySignUpBinding
     private var imageUri : Uri? = null
-    val database = FirebaseDatabase.getInstance()
+    private val firebaseViewModel : FirebaseViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -90,12 +91,9 @@ class SignUpActivity : AppCompatActivity() {
     private fun saveUserToFirebaseDatabase(url: String) {
         val userName = binding.tvUserName.text.toString()
         val userEmail = binding.tvUserEmail.text.toString()
-        val auth = FirebaseAuth.getInstance()
-        val user = auth.currentUser
-        Log.d("authentication", user?.uid.toString())
-        val ref = FirebaseDatabase.getInstance().getReference("users/${user?.uid}")
-        val userCreated = User(userName, userEmail, url)
-        ref.setValue(userCreated)
+        val user = User(userName, userEmail, url)
+
+        firebaseViewModel.saveUser(user)
         val intent = Intent(applicationContext, MainActivity::class.java)
         startActivity(intent)
         finish()

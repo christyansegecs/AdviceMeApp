@@ -16,14 +16,17 @@ import com.chris.adviceapp.adapter.AdviceListAdapter
 import com.chris.adviceapp.adapter.NoteClickDeleteInterface
 import com.chris.adviceapp.databinding.ActivitySavedAdvicesBinding
 import com.chris.adviceapp.usermodel.AdviceFirebase
+import com.chris.adviceapp.viewmodel.FirebaseViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SavedAdvicesActivity : AppCompatActivity(), NoteClickDeleteInterface {
 
+    private val firebaseViewModel : FirebaseViewModel by viewModel()
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: AdviceListAdapter
     private lateinit var binding: ActivitySavedAdvicesBinding
