@@ -1,5 +1,6 @@
 package com.chris.adviceapp.view
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -21,13 +22,25 @@ class NewAdviceActivity : AppCompatActivity()  {
         this.binding = ActivityNewAdviceBinding.inflate(layoutInflater)
         setContentView(this.binding.root)
 
-        val newAdvice = binding.tvNewAdvice.text
+        setupClickListener()
+    }
+
+    private fun setupClickListener() {
 
         binding.btnNewAdvice.setOnClickListener {
             val sdf = SimpleDateFormat("MMM dd,yyyy")
             val currentDate: String = sdf.format(Date())
+            val newAdvice = binding.tvNewAdvice.text
             firebaseViewModel.saveAdvice(AdviceFirebase(newAdvice.toString(), currentDate))
             Toast.makeText(this, getString(R.string.toast_new_advice) , Toast.LENGTH_SHORT).show()
+            finish()
+        }
+
+        binding.btnShare.setOnClickListener {
+            val newAdvice = binding.tvNewAdvice.text
+            val intent = Intent(this, ImageActivity::class.java)
+            intent.putExtra("share", newAdvice.toString())
+            startActivity(intent)
             finish()
         }
     }

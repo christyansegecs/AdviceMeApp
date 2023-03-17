@@ -76,4 +76,6 @@
     <string name="edit_new_username">New Username</string>
     <string name="apply_new_username">Apply New Username</string>
     <string name="tv_no_advices_yet">You don\'t have any saved Advices to show yet</string>
+    <string name="btn_share_advice">Share Advice</string>
+    <string name="tv_share" translatable="false">Let\'s Share Knowledge s2</string>
 </resources>

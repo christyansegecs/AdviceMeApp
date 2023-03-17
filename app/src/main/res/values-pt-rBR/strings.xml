@@ -71,4 +71,5 @@
     <string name="apply_new_username">Aplicar Novo Nome de Usuário</string>
     <string name="toast_username_uploaded">Seu Nome de Usuário foi alterado</string>
     <string name="tv_no_advices_yet">Você ainda não salvou nenhum Conselho</string>
+    <string name="btn_share_advice">Compartilhar Conselho</string>
 </resources>
