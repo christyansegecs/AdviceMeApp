@@ -2,12 +2,13 @@ package com.chris.adviceapp.view
 
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.net.Uri
 import android.os.Bundle
 import android.os.StrictMode
 import android.view.View
-import android.view.View.MeasureSpec
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.chris.adviceapp.databinding.ActivityImageBinding
 import com.chris.adviceapp.util.ImageState
@@ -15,7 +16,6 @@ import com.chris.adviceapp.viewmodel.ImageViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
 import java.io.FileOutputStream
-
 
 class ImageActivity: AppCompatActivity() {
 
@@ -39,27 +39,28 @@ class ImageActivity: AppCompatActivity() {
 
     private fun setupOnClickListener() {
         binding.btnShare.setOnClickListener {
-            getScreenViewBitmap(binding.cvShare)
+            loadBitmapFromView(binding.cvShare)
         }
     }
 
-    private fun getScreenViewBitmap(v: View) {
-        v.isDrawingCacheEnabled = true
-        v.measure(
-            MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
-            MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
-        )
+    private fun loadBitmapFromView(v: View): Bitmap? {
         v.layout(0, 0, v.measuredWidth, v.measuredHeight)
-        v.buildDrawingCache(true)
-        val b = Bitmap.createBitmap(v.drawingCache)
-        v.isDrawingCacheEnabled = false
-        shareImage(b)
+        val returnedBitmap = Bitmap.createBitmap(
+            v.measuredWidth,
+            v.measuredHeight, Bitmap.Config.ARGB_8888
+        )
+        val c = Canvas(returnedBitmap)
+        v.draw(c)
+        binding.cvShare.isVisible = false
+        binding.ivTest.setImageBitmap(returnedBitmap)
+        shareImage(returnedBitmap)
+        return returnedBitmap
     }
 
     private fun shareImage(b: Bitmap) {
         val builder = StrictMode.VmPolicy.Builder()
         StrictMode.setVmPolicy(builder.build())
-        val file = File(externalCacheDir.toString() + "/" + "Advice" + "png")
+        val file = File(externalCacheDir.toString() + "/" + "Advice" + ".png")
         val intent: Intent
         try {
             val outputStream = FileOutputStream(file)
@@ -74,7 +75,6 @@ class ImageActivity: AppCompatActivity() {
             throw RuntimeException(e)
         }
         startActivity(Intent.createChooser(intent, "Share image via: "))
-
     }
 
     private fun handlePicture() = lifecycleScope.launchWhenCreated{
