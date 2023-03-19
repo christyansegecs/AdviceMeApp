@@ -89,16 +89,20 @@ class SavedAdvicesActivity : AppCompatActivity(), NoteClickDeleteInterface {
             .setTitle(getString(R.string.dialog_delete_advice))
             .setPositiveButton(getString(R.string.alert_dialog_logout_positive)) { _, _ ->
 
-                val query = databaseAdvicesRef.orderByChild("advice").equalTo(advice.toString())
-                query.addListenerForSingleValueEvent(object: ValueEventListener {
-                    override fun onDataChange(snapshot: DataSnapshot) {
-                        databaseAdvicesRef.removeValue()
-                        allAdvices.remove(advice.advice)
-                        adapter.updateList(allAdvices)
-                        allAdvicesDates.remove(advice.date)
-                        adapter.updateDateList(allAdvicesDates)
+                val query: Query = databaseAdvicesRef.orderByChild("advice")
+                    .equalTo(advice.advice)
+                query.addListenerForSingleValueEvent(object :
+                    ValueEventListener {
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        for (appleSnapshot in dataSnapshot.children) {
+                            appleSnapshot.ref.removeValue()
+                            allAdvices.remove(advice.advice)
+                            adapter.updateList(allAdvices)
+                            allAdvicesDates.remove(advice.date)
+                            adapter.updateDateList(allAdvicesDates)
+                        }
                     }
-                    override fun onCancelled(error: DatabaseError) {}
+                    override fun onCancelled(databaseError: DatabaseError) {}
                 })
                 Toast.makeText(this,"${advice.advice} ${getString(R.string.toast_delete_advice)}", Toast.LENGTH_SHORT).show()
             }
