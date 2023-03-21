@@ -12,7 +12,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
-class NewAdviceActivity : AppCompatActivity()  {
+class NewAdviceActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityNewAdviceBinding
     private val firebaseViewModel : FirebaseViewModel by viewModel()

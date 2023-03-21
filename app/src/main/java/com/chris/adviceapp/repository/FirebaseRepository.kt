@@ -18,7 +18,4 @@ interface FirebaseRepository {
     suspend fun saveUser(user: User)
 
     suspend fun saveAdvice(advice: AdviceFirebase)
-
-    suspend fun fetchAdvicesFromDatabase()
-
 }

@@ -5,10 +5,9 @@
     android:layout_height="match_parent">
 
     <EditText
-        android:id="@+id/tvNewAdvice"
+        android:id="@+id/tvUpdateAdvice"
         android:layout_width="match_parent"
         android:layout_height="300dp"
-        android:hint="@string/tv_new_advice"
         android:textSize="20sp"
         android:inputType="textMultiLine"
         android:textColor="#575757"
@@ -20,21 +19,21 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/btnNewAdvice"
+        android:id="@+id/btnConfirmUpdate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/btn_new_advice"
+        android:text="@string/btn_confirm_update"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvNewAdvice" />
+        app:layout_constraintTop_toBottomOf="@+id/tvUpdateAdvice" />
 
     <Button
-        android:id="@+id/btnShare"
+        android:id="@+id/btnCancelUpdate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/btn_share_advice"
+        android:text="@string/btn_cancel_update"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnNewAdvice" />
+        app:layout_constraintTop_toBottomOf="@+id/btnConfirmUpdate" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

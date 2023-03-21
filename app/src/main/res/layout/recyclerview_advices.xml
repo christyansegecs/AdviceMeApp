@@ -19,10 +19,20 @@
             android:textSize="20sp" />
 
         <ImageView
+            android:id="@+id/icUpdate"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="15"
+            android:layout_marginBottom="8dp"
+            android:contentDescription="@string/ic_update"
+            android:background="@android:color/holo_orange_light"
+            android:src="@drawable/ic_update" />
+
+        <ImageView
             android:id="@+id/icDelete"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="30"
+            android:layout_weight="15"
             android:layout_marginBottom="8dp"
             android:contentDescription="@string/ic_delete"
             android:background="@android:color/holo_orange_light"

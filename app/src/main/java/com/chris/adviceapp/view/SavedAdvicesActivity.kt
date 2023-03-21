@@ -1,10 +1,12 @@
 package com.chris.adviceapp.view
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.MenuProvider
@@ -14,19 +16,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.chris.adviceapp.R
 import com.chris.adviceapp.adapter.AdviceListAdapter
 import com.chris.adviceapp.adapter.NoteClickDeleteInterface
+import com.chris.adviceapp.adapter.NoteClickUpdateInterface
 import com.chris.adviceapp.databinding.ActivitySavedAdvicesBinding
 import com.chris.adviceapp.usermodel.AdviceFirebase
-import com.chris.adviceapp.viewmodel.FirebaseViewModel
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import com.google.firebase.database.*
+import java.text.SimpleDateFormat
+import java.util.*
 
-class SavedAdvicesActivity : AppCompatActivity(), NoteClickDeleteInterface {
+class SavedAdvicesActivity : AppCompatActivity(), NoteClickDeleteInterface, NoteClickUpdateInterface {
 
-    private val firebaseViewModel : FirebaseViewModel by viewModel()
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: AdviceListAdapter
     private lateinit var binding: ActivitySavedAdvicesBinding
@@ -35,6 +34,23 @@ class SavedAdvicesActivity : AppCompatActivity(), NoteClickDeleteInterface {
     private val databaseAdvicesRef = FirebaseDatabase.getInstance().getReference("users/${user?.uid}/Advices")
     val allAdvices = ArrayList<String>()
     val allAdvicesDates = ArrayList<String>()
+    lateinit var adviceBeforeUpdating: String
+    private lateinit var adviceAfterUpdating: String
+
+    private val getResult = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+
+        if (result.data != null) {
+            val sdf = SimpleDateFormat("MMM dd,yyyy")
+            val currentDate: String = sdf.format(Date())
+
+            val adviceUpdated = result.data?.getStringExtra("advice")
+            adviceAfterUpdating = adviceUpdated.toString()
+            updateAdvice(AdviceFirebase(adviceBeforeUpdating, currentDate))
+        }
+
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,7 +59,7 @@ class SavedAdvicesActivity : AppCompatActivity(), NoteClickDeleteInterface {
         setContentView(this.binding.root)
 
         this.recyclerView = this.binding.rvAdvice
-        this.adapter = AdviceListAdapter(this,this)
+        this.adapter = AdviceListAdapter(this,this, this)
         this.recyclerView.adapter = this.adapter
         this.recyclerView.layoutManager = LinearLayoutManager(this)
 
@@ -104,11 +120,44 @@ class SavedAdvicesActivity : AppCompatActivity(), NoteClickDeleteInterface {
                     }
                     override fun onCancelled(databaseError: DatabaseError) {}
                 })
-                Toast.makeText(this,"${advice.advice} ${getString(R.string.toast_delete_advice)}", Toast.LENGTH_SHORT).show()
             }
             .setNegativeButton(getString(R.string.alert_dialog_logout_negative)) { _, _ ->
             }.create()
         dialog.show()
+    }
+
+    override fun onUpdateClick(advice: AdviceFirebase) {
+        adviceBeforeUpdating = advice.advice
+
+        val intent = Intent(this, UpdateAdviceActivity::class.java)
+        intent.putExtra("adviceSending", advice.advice)
+        getResult.launch(intent)
+    }
+
+    private fun updateAdvice(advice: AdviceFirebase) {
+
+        val adviceUpdated = mapOf(
+            "advice" to adviceAfterUpdating,
+        )
+
+        val query: Query = databaseAdvicesRef.orderByChild("advice")
+            .equalTo(advice.advice)
+        query.addListenerForSingleValueEvent(object :
+            ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                for (appleSnapshot in dataSnapshot.children) {
+
+                    appleSnapshot.ref.updateChildren(adviceUpdated)
+                    allAdvices.remove(advice.advice)
+                    allAdvicesDates.remove(advice.date)
+                    allAdvices.add(adviceAfterUpdating)
+                    allAdvicesDates.add(advice.date)
+                    adapter.updateList(allAdvices)
+                    adapter.updateDateList(allAdvicesDates)
+                }
+            }
+            override fun onCancelled(databaseError: DatabaseError) {}
+        })
     }
 
     private fun setupActionBar() {

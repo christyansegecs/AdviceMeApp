@@ -66,12 +66,4 @@ class FirebaseViewModel(
         }
     }
 
-    fun fetchAdvicesFromDatabase() {
-        viewModelScope.launch {
-            withContext(Dispatchers.Default) {
-                repository.fetchAdvicesFromDatabase()
-            }
-        }
-    }
-
 }

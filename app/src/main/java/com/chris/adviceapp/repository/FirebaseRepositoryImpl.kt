@@ -18,12 +18,13 @@ class FirebaseRepositoryImpl(
     private val database: FirebaseDatabase
     ) : FirebaseRepository {
 
+    val user = firebaseAuth
+
     override suspend fun signIn(email: String, password: String): Flow<Task<AuthResult>> = flow {
         emit(firebaseAuth.signInWithEmailAndPassword(email, password))
     }.flowOn(Dispatchers.IO)
 
     override suspend fun getCurrentUser(): FirebaseUser? {
-        val user = firebaseAuth
         return withContext(Dispatchers.Default) {
             user.currentUser
         }
@@ -46,16 +47,6 @@ class FirebaseRepositoryImpl(
             .child("Advices")
             .push()
             .setValue(advice)
-    }
-
-    override suspend fun fetchAdvicesFromDatabase() {
-        val auth = FirebaseAuth.getInstance()
-        val userAuth = auth.currentUser
-
-        return withContext(Dispatchers.Default) {
-            database.getReference("/users/${userAuth?.uid}")
-                .child("Advices")
-        }
     }
 
 }

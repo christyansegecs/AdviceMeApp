@@ -72,4 +72,8 @@
     <string name="toast_username_uploaded">Seu Nome de Usuário foi alterado</string>
     <string name="tv_no_advices_yet">Você ainda não salvou nenhum Conselho</string>
     <string name="btn_share_advice">Compartilhar Conselho</string>
+    <string name="toast_update_advice">Seu conselho foi updated</string>
+    <string name="dialog_update_advice">Quer reescrever esse Conselho?</string>
+    <string name="btn_confirm_update">update</string>
+    <string name="btn_cancel_update">cancelar</string>
 </resources>
