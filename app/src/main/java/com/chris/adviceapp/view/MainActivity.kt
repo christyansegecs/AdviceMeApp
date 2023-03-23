@@ -1,11 +1,15 @@
 package com.chris.adviceapp.view
 
 import android.content.Intent
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities.NET_CAPABILITY_INTERNET
+import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.MenuProvider
@@ -13,6 +17,7 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.chris.adviceapp.R
 import com.chris.adviceapp.databinding.ActivityMainBinding
+import com.chris.adviceapp.databinding.CustomBottomSheetBinding
 import com.chris.adviceapp.usermodel.AdviceFirebase
 import com.chris.adviceapp.util.AdviceState
 import com.chris.adviceapp.viewmodel.AdviceViewModel
@@ -20,6 +25,7 @@ import com.chris.adviceapp.viewmodel.FirebaseViewModel
 import com.facebook.login.LoginManager
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.auth.FirebaseAuth
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.text.SimpleDateFormat
@@ -32,16 +38,38 @@ class MainActivity : AppCompatActivity() {
     private val firebaseViewModel : FirebaseViewModel by viewModel()
     private lateinit var currentAdvice : String
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         this.binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(this.binding.root)
 
         setupActionBar()
-        adviceViewModel.getAdvice()
+        if (isNetworkAvailable()) {
+            adviceViewModel.getAdvice()
+        } else {
+            showBottomSheetDialog()
+        }
+
         handleAdvices()
         setupClickListener()
         firebaseViewModel.getCurrentUser()
+    }
+
+    private fun showBottomSheetDialog() {
+        val dialog = BottomSheetDialog(this, R.style.BottomSheetDialog)
+
+        val sheetBinding: CustomBottomSheetBinding = CustomBottomSheetBinding.inflate(layoutInflater, null, false)
+        dialog.setContentView(sheetBinding.root)
+        dialog.show()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun isNetworkAvailable(): Boolean {
+        val cm = getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
+        val capabilities = cm.getNetworkCapabilities(cm.activeNetwork)
+
+        return (capabilities != null && capabilities.hasCapability(NET_CAPABILITY_INTERNET))
     }
 
     private fun handleAdvices() = lifecycleScope.launchWhenCreated{
@@ -88,24 +116,44 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     private fun setupClickListener() {
         binding.btnNewAdvice.setOnClickListener { adviceViewModel.getAdvice() }
 
         binding.btnSaveAdvice.setOnClickListener {
-            val sdf = SimpleDateFormat("MMM dd,yyyy")
-            val currentDate: String = sdf.format(Date())
-            val adviceSaved = AdviceFirebase(currentAdvice, currentDate)
-            firebaseViewModel.getCurrentUser()
-            firebaseViewModel.saveAdvice(adviceSaved)
+
+            if (isNetworkAvailable()) {
+                val sdf = SimpleDateFormat("MMM dd,yyyy")
+                val currentDate: String = sdf.format(Date())
+                val adviceSaved = AdviceFirebase(currentAdvice, currentDate)
+                firebaseViewModel.getCurrentUser()
+                firebaseViewModel.saveAdvice(adviceSaved)
+
+            } else {
+                showBottomSheetDialog()
+            }
+
         }
 
         binding.btnList.setOnClickListener {
-            val intent = Intent(this, SavedAdvicesActivity::class.java)
-            startActivity(intent)
+
+            if (isNetworkAvailable()) {
+                val intent = Intent(this, SavedAdvicesActivity::class.java)
+                startActivity(intent)
+            } else {
+                showBottomSheetDialog()
+            }
+
         }
         binding.fabNewAdvice.setOnClickListener {
-            val intent = Intent(this, NewAdviceActivity::class.java)
-            startActivity(intent)
+
+            if (isNetworkAvailable()) {
+                val intent = Intent(this, NewAdviceActivity::class.java)
+                startActivity(intent)
+            }
+            else {
+                showBottomSheetDialog()
+            }
         }
     }
 

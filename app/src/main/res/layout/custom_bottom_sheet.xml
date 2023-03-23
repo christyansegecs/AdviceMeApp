@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_custom_dialog"
+    android:padding="25dp">
+
+    <ImageView
+        android:id="@+id/ivNoInternetConnection"
+        android:layout_width="match_parent"
+        android:layout_height="380dp"
+        android:importantForAccessibility="no"
+        app:srcCompat="@drawable/connection" />
+
+    <TextView
+        android:id="@+id/tvTitleNoInternetConnection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="No Internet Connection"
+        android:gravity="center"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:layout_below="@id/ivNoInternetConnection"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"/>
+
+    <TextView
+        android:id="@+id/tvNoInternetConnection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="You are not connected to the internet. Make sure Wi-fi is on, Airplane Mode is off and try again."
+        android:gravity="center"
+        android:textSize="20sp"
+        android:padding="20dp"
+        android:layout_below="@id/tvTitleNoInternetConnection"
+        android:layout_marginBottom="20dp"/>
+
+    <Button
+        android:id="@+id/btnInternetConnection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Retry"
+        android:layout_below="@id/tvNoInternetConnection" />
+
+</RelativeLayout>
