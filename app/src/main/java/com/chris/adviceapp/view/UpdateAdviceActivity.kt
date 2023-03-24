@@ -28,8 +28,6 @@ class UpdateAdviceActivity : AppCompatActivity() {
         }
 
         binding.btnCancelUpdate.setOnClickListener {
-            val intent = Intent(this, SavedAdvicesActivity::class.java)
-            startActivity(intent)
             finish()
         }
     }

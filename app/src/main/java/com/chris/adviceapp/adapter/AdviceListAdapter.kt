@@ -25,7 +25,7 @@ class AdviceListAdapter(
     private val noteClickUpdateInterface: NoteClickUpdateInterface
 ) : RecyclerView.Adapter<AdviceListAdapter.ViewHolder>() {
 
-    private val allAdvices = ArrayList<String>()
+    private var allAdvices = ArrayList<String>()
     private val allAdvicesDates = ArrayList<String>()
     private val auth = FirebaseAuth.getInstance()
     private val user = auth.currentUser
@@ -84,6 +84,11 @@ class AdviceListAdapter(
     fun updateDateList(newList: List<String>){
         allAdvicesDates.clear()
         allAdvicesDates.addAll(newList)
+        notifyDataSetChanged()
+    }
+
+    fun setFilteredList(allAdvices: ArrayList<String>){
+        this.allAdvices = allAdvices
         notifyDataSetChanged()
     }
 }

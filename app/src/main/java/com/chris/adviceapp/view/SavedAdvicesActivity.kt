@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.widget.SearchView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
@@ -23,6 +24,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 class SavedAdvicesActivity : AppCompatActivity(), NoteClickDeleteInterface, NoteClickUpdateInterface {
 
@@ -65,6 +67,37 @@ class SavedAdvicesActivity : AppCompatActivity(), NoteClickDeleteInterface, Note
 
         setupActionBar()
         fetchAdvicesFromDatabase()
+
+        binding.svAdvice.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
+            androidx.appcompat.widget.SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                filterList(newText)
+                return true
+            }
+
+        })
+    }
+
+    private fun filterList(query: String?) {
+        if (query != null) {
+            val filteredList = ArrayList<String>()
+            for (i in allAdvices) {
+                if (i.toLowerCase(Locale.ROOT).contains(query)) {
+                    filteredList.add(i)
+                }
+            }
+
+            if (allAdvices.isEmpty()) {
+                Toast.makeText(this, "No Data found", Toast.LENGTH_SHORT).show()
+            } else {
+                adapter.setFilteredList(filteredList)
+            }
+        }
+
     }
 
     private fun checkIfIsAnyAdviceSaved() {
