@@ -74,6 +74,21 @@
             android:screenOrientation="portrait"
             android:exported="true">
         </activity>
+        <activity
+            android:name=".view.FriendsActivity"
+            android:screenOrientation="portrait"
+            android:exported="true">
+        </activity>
+        <activity
+            android:name=".view.AddFriendActivity"
+            android:screenOrientation="portrait"
+            android:exported="true">
+        </activity>
+        <activity
+            android:name=".view.FriendProfileActivity"
+            android:screenOrientation="portrait"
+            android:exported="true">
+        </activity>
     </application>
 
 </manifest>

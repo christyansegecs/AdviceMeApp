@@ -1,6 +1,9 @@
 package com.chris.adviceapp.view
 
 import android.content.Intent
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
@@ -8,6 +11,7 @@ import android.view.MenuItem
 import android.widget.SearchView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.MenuProvider
@@ -19,7 +23,9 @@ import com.chris.adviceapp.adapter.AdviceListAdapter
 import com.chris.adviceapp.adapter.NoteClickDeleteInterface
 import com.chris.adviceapp.adapter.NoteClickUpdateInterface
 import com.chris.adviceapp.databinding.ActivitySavedAdvicesBinding
+import com.chris.adviceapp.databinding.CustomBottomSheetBinding
 import com.chris.adviceapp.usermodel.AdviceFirebase
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import java.text.SimpleDateFormat
@@ -54,6 +60,7 @@ class SavedAdvicesActivity : AppCompatActivity(), NoteClickDeleteInterface, Note
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -78,8 +85,8 @@ class SavedAdvicesActivity : AppCompatActivity(), NoteClickDeleteInterface, Note
                 filterList(newText)
                 return true
             }
-
         })
+        setupBottomNavigationBar()
     }
 
     private fun filterList(query: String?) {
@@ -228,5 +235,74 @@ class SavedAdvicesActivity : AppCompatActivity(), NoteClickDeleteInterface, Note
             .setNegativeButton(getString(R.string.alert_dialog_logout_negative)) { _, _ ->
             }.create()
         dialog.show()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun setupBottomNavigationBar() {
+        binding.bnvHome.setOnItemSelectedListener {
+            when(it.itemId) {
+                R.id.bnv_home -> startMainActivity()
+                R.id.bnv_friends -> startFriendsActivity()
+                R.id.bnv_add -> startAddFriendActivity()
+                else -> {}
+            }
+            true
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun startFriendsActivity() {
+        if (isNetworkAvailable()) {
+            val intent = Intent(this, FriendsActivity::class.java)
+            startActivity(intent)
+            finish()
+        } else {
+            showBottomSheetDialog()
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun startMainActivity() {
+        if (isNetworkAvailable()) {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            finish()
+        } else {
+            showBottomSheetDialog()
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun startAddFriendActivity() {
+        if (isNetworkAvailable()) {
+            val intent = Intent(this, AddFriendActivity::class.java)
+            startActivity(intent)
+            finish()
+        } else {
+            showBottomSheetDialog()
+        }
+    }
+
+    private fun showBottomSheetDialog() {
+        val dialog = BottomSheetDialog(this, R.style.BottomSheetDialog)
+
+        val sheetBinding: CustomBottomSheetBinding = CustomBottomSheetBinding.inflate(layoutInflater, null, false)
+        dialog.setContentView(sheetBinding.root)
+        dialog.show()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun isNetworkAvailable(): Boolean {
+        val cm = getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
+        val capabilities = cm.getNetworkCapabilities(cm.activeNetwork)
+
+        return (capabilities != null && capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET))
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 }

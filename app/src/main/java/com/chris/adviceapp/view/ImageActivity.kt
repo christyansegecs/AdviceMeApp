@@ -9,27 +9,19 @@ import android.os.StrictMode
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
-import androidx.lifecycle.lifecycleScope
 import com.chris.adviceapp.databinding.ActivityImageBinding
-import com.chris.adviceapp.util.ImageState
-import com.chris.adviceapp.viewmodel.ImageViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
 import java.io.FileOutputStream
 
 class ImageActivity: AppCompatActivity() {
 
     private lateinit var binding: ActivityImageBinding
-    private val imageViewModel : ImageViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         this.binding = ActivityImageBinding.inflate(layoutInflater)
         setContentView(this.binding.root)
 
-        imageViewModel.getPictureFromText()
-
-        handlePicture()
         val advice = intent.getStringExtra("share")
 
         binding.tvShare.text = advice
@@ -75,16 +67,5 @@ class ImageActivity: AppCompatActivity() {
             throw RuntimeException(e)
         }
         startActivity(Intent.createChooser(intent, "Share image via: "))
-    }
-
-    private fun handlePicture() = lifecycleScope.launchWhenCreated{
-        imageViewModel._imageStateFlow.collect {
-            when(it) {
-                is ImageState.onLoading -> {}
-                is ImageState.onError -> {}
-                is ImageState.onSuccess -> {}
-                is ImageState.Empty -> {}
-            }
-        }
     }
 }

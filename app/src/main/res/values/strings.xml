@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name" translatable="false">AdviceApp</string>
-    <string name="saved_list">saved list</string>
     <string name="save_this_advice">Save this advice</string>
     <string name="next_one">next one</string>
     <string name="email_hint">Enter Your E-mail Address</string>

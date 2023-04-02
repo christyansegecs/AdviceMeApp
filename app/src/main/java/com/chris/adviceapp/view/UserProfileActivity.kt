@@ -45,11 +45,7 @@ class UserProfileActivity  : AppCompatActivity() {
     private fun fetchUserProfilePicture() {
         databaseUserPictureRef.addListenerForSingleValueEvent(object: ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                if (snapshot.value.toString() == URL_PICTURE_DEFAULT) {
-                    Picasso.get().load(snapshot.value.toString()).into(binding.ivUserProfile)
-                } else {
-                    Picasso.get().load(snapshot.value.toString()).rotate(90F).into(binding.ivUserProfile)
-                }
+                Picasso.get().load(snapshot.value.toString()).into(binding.ivUserProfile)
             }
             override fun onCancelled(error: DatabaseError) {
                 Log.d("snapshot", "something went wrong")
@@ -101,7 +97,7 @@ class UserProfileActivity  : AppCompatActivity() {
         if (requestCode == 0 && resultCode == Activity.RESULT_OK && data != null) {
             imageUri = data.data
             imageUri?.let {
-                Picasso.get().load(it).rotate(90F).into(binding.ivUserProfile)
+                Picasso.get().load(it).into(binding.ivUserProfile)
                 uploadImageToFirebaseStorage()
             }
         }

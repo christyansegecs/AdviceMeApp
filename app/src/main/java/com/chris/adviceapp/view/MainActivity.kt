@@ -45,6 +45,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(this.binding.root)
 
         setupActionBar()
+        setupBottomNavigationBar()
         if (isNetworkAvailable()) {
             adviceViewModel.getAdvice()
         } else {
@@ -111,6 +112,19 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun setupBottomNavigationBar() {
+        binding.bnvHome.setOnItemSelectedListener {
+            when(it.itemId) {
+                R.id.bnv_list -> startSavedAdvicesActivity()
+                R.id.bnv_friends -> startFriendsActivity()
+                R.id.bnv_add -> startAddFriendActivity()
+                else -> {}
+            }
+            true
+        }
+    }
+
     private fun goToUserProfile() {
         val intent = Intent(this, UserProfileActivity::class.java)
         startActivity(intent)
@@ -132,19 +146,8 @@ class MainActivity : AppCompatActivity() {
             } else {
                 showBottomSheetDialog()
             }
-
         }
 
-        binding.btnList.setOnClickListener {
-
-            if (isNetworkAvailable()) {
-                val intent = Intent(this, SavedAdvicesActivity::class.java)
-                startActivity(intent)
-            } else {
-                showBottomSheetDialog()
-            }
-
-        }
         binding.fabNewAdvice.setOnClickListener {
 
             if (isNetworkAvailable()) {
@@ -189,4 +192,36 @@ class MainActivity : AppCompatActivity() {
         dialog.show()
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun startFriendsActivity() {
+        if (isNetworkAvailable()) {
+            val intent = Intent(this, FriendsActivity::class.java)
+            startActivity(intent)
+            finish()
+        } else {
+            showBottomSheetDialog()
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun startSavedAdvicesActivity() {
+        if (isNetworkAvailable()) {
+            val intent = Intent(this, SavedAdvicesActivity::class.java)
+            startActivity(intent)
+            finish()
+        } else {
+            showBottomSheetDialog()
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun startAddFriendActivity() {
+        if (isNetworkAvailable()) {
+            val intent = Intent(this, AddFriendActivity::class.java)
+            startActivity(intent)
+            finish()
+        } else {
+            showBottomSheetDialog()
+        }
+    }
 }

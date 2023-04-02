@@ -53,7 +53,7 @@ class AdviceListAdapter(
                     Picasso.get().load(imageString).transform(CropCircleTransformation()).into(holder.ivUser)
                 } else {
                     val imageString = snapshot.value.toString()
-                    Picasso.get().load(imageString).rotate(90F).transform(CropCircleTransformation()).into(holder.ivUser)
+                    Picasso.get().load(imageString).transform(CropCircleTransformation()).into(holder.ivUser)
                 }
             }
             override fun onCancelled(error: DatabaseError) {
@@ -93,10 +93,10 @@ class AdviceListAdapter(
     }
 }
 
-interface  NoteClickDeleteInterface{
+interface NoteClickDeleteInterface {
     fun onDeleteIconClick(advice: AdviceFirebase)
 }
 
-interface  NoteClickUpdateInterface{
+interface NoteClickUpdateInterface {
     fun onUpdateClick(advice: AdviceFirebase)
 }

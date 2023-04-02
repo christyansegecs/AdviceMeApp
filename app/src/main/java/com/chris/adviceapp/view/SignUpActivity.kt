@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
 import android.util.Log
@@ -15,7 +16,6 @@ import com.chris.adviceapp.usermodel.User
 import com.chris.adviceapp.viewmodel.FirebaseViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
-import com.squareup.picasso.Picasso
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 
@@ -35,19 +35,15 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     private fun chooseImage() {
-        val intent = Intent(Intent.ACTION_GET_CONTENT)
-        intent.type = "image/*"
-        startActivityForResult(intent, 0)
+        val gallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
+        startActivityForResult(gallery, PICK_IMAGE)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
-        if (requestCode == 0 && resultCode == Activity.RESULT_OK && data != null) {
-            imageUri = data.data
-            imageUri?.let {
-                Picasso.get().load(it).rotate(90F).into(binding.ivNewUser)
-            }
+        if (resultCode == Activity.RESULT_OK && requestCode == PICK_IMAGE) {
+            imageUri = data?.data
+            binding.ivNewUser.setImageURI(imageUri)
         }
     }
 
@@ -133,5 +129,9 @@ class SignUpActivity : AppCompatActivity() {
         binding.ivNewUser.setOnClickListener{
             chooseImage()
         }
+    }
+
+    companion object {
+        private const val PICK_IMAGE = 100
     }
 }
