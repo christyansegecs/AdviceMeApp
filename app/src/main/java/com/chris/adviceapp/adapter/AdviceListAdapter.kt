@@ -21,6 +21,7 @@ import jp.wasabeef.picasso.transformations.CropCircleTransformation
 
 class AdviceListAdapter(
     val context: Context,
+    private val noteClickShareInterface: NoteClickShareInterface,
     private val noteClickDeleteInterface: NoteClickDeleteInterface,
     private val noteClickUpdateInterface: NoteClickUpdateInterface
 ) : RecyclerView.Adapter<AdviceListAdapter.ViewHolder>() {
@@ -33,8 +34,9 @@ class AdviceListAdapter(
 
     inner class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
         val tvAdvice = itemView.findViewById<TextView>(R.id.tvAdviceDaRV)
-        val icDelete = itemView.findViewById<ImageView>(R.id.icDelete)
+        val icShare = itemView.findViewById<ImageView>(R.id.icShare)
         val icUpdate = itemView.findViewById<ImageView>(R.id.icUpdate)
+        val icDelete = itemView.findViewById<ImageView>(R.id.icDelete)
         val ivUser = itemView.findViewById<ImageView>(R.id.ivUser)
         val tvUser = itemView.findViewById<TextView>(R.id.tvUser)
         val tvDate = itemView.findViewById<TextView>(R.id.tvDate)
@@ -63,6 +65,9 @@ class AdviceListAdapter(
         holder.tvAdvice.text = "${position+1} - ${allAdvices[position]}"
         holder.tvDate.text = allAdvicesDates[position]
         holder.tvUser.text = "${user?.email}"
+        holder.icShare.setOnClickListener{
+            noteClickShareInterface.onShareIconClick(AdviceFirebase(allAdvices[position],allAdvicesDates[position]))
+        }
         holder.icUpdate.setOnClickListener{
             noteClickUpdateInterface.onUpdateClick(AdviceFirebase(allAdvices[position],allAdvicesDates[position]))
         }
@@ -91,6 +96,10 @@ class AdviceListAdapter(
         this.allAdvices = allAdvices
         notifyDataSetChanged()
     }
+}
+
+interface NoteClickShareInterface {
+    fun onShareIconClick(advice: AdviceFirebase)
 }
 
 interface NoteClickDeleteInterface {

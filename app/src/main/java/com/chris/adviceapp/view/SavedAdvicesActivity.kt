@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.chris.adviceapp.R
 import com.chris.adviceapp.adapter.AdviceListAdapter
 import com.chris.adviceapp.adapter.NoteClickDeleteInterface
+import com.chris.adviceapp.adapter.NoteClickShareInterface
 import com.chris.adviceapp.adapter.NoteClickUpdateInterface
 import com.chris.adviceapp.databinding.ActivitySavedAdvicesBinding
 import com.chris.adviceapp.databinding.CustomBottomSheetBinding
@@ -32,7 +33,8 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class SavedAdvicesActivity : AppCompatActivity(), NoteClickDeleteInterface, NoteClickUpdateInterface {
+class SavedAdvicesActivity : AppCompatActivity(), NoteClickShareInterface,
+    NoteClickDeleteInterface, NoteClickUpdateInterface {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: AdviceListAdapter
@@ -68,7 +70,7 @@ class SavedAdvicesActivity : AppCompatActivity(), NoteClickDeleteInterface, Note
         setContentView(this.binding.root)
 
         this.recyclerView = this.binding.rvAdvice
-        this.adapter = AdviceListAdapter(this,this, this)
+        this.adapter = AdviceListAdapter(this,this, this, this)
         this.recyclerView.adapter = this.adapter
         this.recyclerView.layoutManager = LinearLayoutManager(this)
 
@@ -104,7 +106,6 @@ class SavedAdvicesActivity : AppCompatActivity(), NoteClickDeleteInterface, Note
                 adapter.setFilteredList(filteredList)
             }
         }
-
     }
 
     private fun checkIfIsAnyAdviceSaved() {
@@ -172,6 +173,13 @@ class SavedAdvicesActivity : AppCompatActivity(), NoteClickDeleteInterface, Note
         val intent = Intent(this, UpdateAdviceActivity::class.java)
         intent.putExtra("adviceSending", advice.advice)
         getResult.launch(intent)
+    }
+
+    override fun onShareIconClick(advice: AdviceFirebase) {
+        val intent = Intent(this, ImageActivity::class.java)
+        intent.putExtra("share", advice.advice)
+        startActivity(intent)
+        finish()
     }
 
     private fun updateAdvice(advice: AdviceFirebase) {
