@@ -7,6 +7,9 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CircleCrop
+import com.bumptech.glide.request.RequestOptions
 import com.chris.adviceapp.R
 import com.chris.adviceapp.usermodel.User
 import com.google.firebase.auth.FirebaseAuth
@@ -34,7 +37,7 @@ class UsersAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.tvFriends.text = allUsers[position].userName
-        Picasso.get().load(allUsers[position].profileImageUrl).transform(CropCircleTransformation()).into(holder.ivUser)
+        Glide.with(context).load(allUsers[position].profileImageUrl).apply(RequestOptions().transform(CircleCrop())).into((holder.ivUser))
         holder.tvUser.text = allUsers[position].userEmail
         holder.tvFriends.setOnClickListener {
             userClickInterface.onUserClick(allUsers[position].userEmail)

@@ -8,6 +8,9 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CircleCrop
+import com.bumptech.glide.request.RequestOptions
 import com.chris.adviceapp.R
 import com.chris.adviceapp.usermodel.AdviceFirebase
 import com.chris.adviceapp.view.UserProfileActivity
@@ -16,8 +19,6 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.squareup.picasso.Picasso
-import jp.wasabeef.picasso.transformations.CropCircleTransformation
 
 class AdviceListAdapter(
     val context: Context,
@@ -52,10 +53,10 @@ class AdviceListAdapter(
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.value.toString() == UserProfileActivity.URL_PICTURE_DEFAULT) {
                     val imageString = snapshot.value.toString()
-                    Picasso.get().load(imageString).transform(CropCircleTransformation()).into(holder.ivUser)
+                    Glide.with(context).load(imageString).apply(RequestOptions().transform(CircleCrop())).into((holder.ivUser))
                 } else {
                     val imageString = snapshot.value.toString()
-                    Picasso.get().load(imageString).transform(CropCircleTransformation()).into(holder.ivUser)
+                    Glide.with(context).load(imageString) .apply(RequestOptions().transform(CircleCrop())).into((holder.ivUser))
                 }
             }
             override fun onCancelled(error: DatabaseError) {

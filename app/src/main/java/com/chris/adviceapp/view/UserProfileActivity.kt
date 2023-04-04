@@ -8,6 +8,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import com.bumptech.glide.Glide
 import com.chris.adviceapp.R
 import com.chris.adviceapp.databinding.ActivityUserProfileBinding
 import com.chris.adviceapp.viewmodel.FirebaseViewModel
@@ -45,7 +46,7 @@ class UserProfileActivity  : AppCompatActivity() {
     private fun fetchUserProfilePicture() {
         databaseUserPictureRef.addListenerForSingleValueEvent(object: ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                Picasso.get().load(snapshot.value.toString()).into(binding.ivUserProfile)
+                Glide.with(this@UserProfileActivity).load(snapshot.value.toString()).into(binding.ivUserProfile)
             }
             override fun onCancelled(error: DatabaseError) {
                 Log.d("snapshot", "something went wrong")

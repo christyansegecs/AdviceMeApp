@@ -3,10 +3,10 @@ package com.chris.adviceapp.view
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import com.bumptech.glide.Glide
 import com.chris.adviceapp.databinding.ActivityFriendProfileBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
-import com.squareup.picasso.Picasso
 
 class FriendProfileActivity  : AppCompatActivity()  {
 
@@ -44,7 +44,7 @@ class FriendProfileActivity  : AppCompatActivity()  {
                     userId = ds.key.toString()
                     binding.tvUserName.text = userName
                     binding.tvUserEmail.text = userEmail
-                    Picasso.get().load(profileImageUrl).into(binding.ivUserProfile)
+                    Glide.with(this@FriendProfileActivity).load(profileImageUrl).into((binding.ivUserProfile))
                     if (auth.uid == userId) {
                         binding.btnAddFriend.isVisible = false
                     }
