@@ -5,7 +5,6 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.widget.SearchView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -25,7 +24,6 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import java.util.*
-import kotlin.collections.ArrayList
 
 class FriendsActivity : AppCompatActivity(), FriendClickInterface {
 
@@ -79,9 +77,9 @@ class FriendsActivity : AppCompatActivity(), FriendClickInterface {
                                 val userName = snapshot.child("userName").value.toString()
                                 val userEmail = snapshot.child("userEmail").value.toString()
                                 val profileImageUrl = snapshot.child("profileImageUrl").value.toString()
-                                val user = User(userName, userEmail, profileImageUrl)
+                                val token = snapshot.child("token").value.toString()
+                                val user = User(userName, userEmail, profileImageUrl, token)
                                 allFriends.add(user)
-                                Log.d("102030", userName)
                                 adapter.updateList(allFriends)
 
                         }

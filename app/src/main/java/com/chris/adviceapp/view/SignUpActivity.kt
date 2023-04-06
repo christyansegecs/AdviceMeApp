@@ -14,7 +14,9 @@ import com.chris.adviceapp.R
 import com.chris.adviceapp.databinding.ActivitySignUpBinding
 import com.chris.adviceapp.usermodel.User
 import com.chris.adviceapp.viewmodel.FirebaseViewModel
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.storage.FirebaseStorage
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
@@ -23,6 +25,7 @@ class SignUpActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySignUpBinding
     private var imageUri : Uri? = null
+    private var token : String? = null
     private val firebaseViewModel : FirebaseViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -85,14 +88,22 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     private fun saveUserToFirebaseDatabase(url: String) {
-        val userName = binding.tvUserName.text.toString()
-        val userEmail = binding.tvUserEmail.text.toString()
-        val user = User(userName, userEmail, url)
-
-        firebaseViewModel.saveUser(user)
-        val intent = Intent(applicationContext, MainActivity::class.java)
-        startActivity(intent)
-        finish()
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                return@OnCompleteListener
+            }
+            // Get new FCM registration token
+            token = task.result
+            val userName = binding.tvUserName.text.toString()
+            val userEmail = binding.tvUserEmail.text.toString()
+            val user = token?.let { User(userName, userEmail, url, it) }
+            if (user != null) {
+                firebaseViewModel.saveUser(user)
+            }
+            val intent = Intent(applicationContext, MainActivity::class.java)
+            startActivity(intent)
+            finish()
+        })
     }
 
     private fun setButtonClickListener() {

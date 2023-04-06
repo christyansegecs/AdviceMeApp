@@ -68,7 +68,8 @@ class AddFriendActivity : AppCompatActivity(), UserClickInterface {
                     val userName = ds.child("userName").value.toString()
                     val userEmail = ds.child("userEmail").value.toString()
                     val profileImageUrl = ds.child("profileImageUrl").value.toString()
-                    val user = User(userName, userEmail, profileImageUrl)
+                    val token = ds.child("token").value.toString()
+                    val user = User(userName, userEmail, profileImageUrl, token)
                     allUsers.add(user)
                     adapter.updateList(allUsers)
                 }
