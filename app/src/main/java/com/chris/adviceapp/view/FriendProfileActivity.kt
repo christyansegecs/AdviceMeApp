@@ -21,15 +21,15 @@ class FriendProfileActivity  : AppCompatActivity()  {
 
     private val TAG = "FriendProfileActivity"
     val auth = FirebaseAuth.getInstance()
-    private val databaseUserRef = FirebaseDatabase.getInstance().getReference("users")
-    private val databaseRequestRef = FirebaseDatabase.getInstance().getReference("friend_request")
     private lateinit var binding: ActivityFriendProfileBinding
     var CURRENT_STATE = "not friends"
     private lateinit var userEmail: String
-    private lateinit var userId: String
+    private var userId = "userId"
     val coroutineExceptionHandler = CoroutineExceptionHandler{_, throwable ->
         throwable.printStackTrace()
     }
+    private val databaseUserRef = FirebaseDatabase.getInstance().getReference("users")
+    private val databaseRequestRef = FirebaseDatabase.getInstance().getReference("friend_request")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,8 +39,8 @@ class FriendProfileActivity  : AppCompatActivity()  {
         userEmail = intent.getStringExtra("user").toString()
 
         fetchUserFromDatabase()
-        setupButtons()
         setupAddFriend()
+        setupButtons()
     }
 
     private fun fetchUserFromDatabase() {
@@ -155,7 +155,8 @@ class FriendProfileActivity  : AppCompatActivity()  {
 
     private fun declineFriendRequest() {
         binding.btnRefuseFriend.setOnClickListener {
-            auth.uid?.let { it1 -> databaseRequestRef.child(it1).child(userId).removeValue() }
+            auth.uid?.let { it1 -> databaseRequestRef.child(it1).child(userId).removeValue()
+            databaseRequestRef.child(userId).child(it1).removeValue()}
             binding.btnAddFriend.text = "Add Friend"
             CURRENT_STATE = STATE_NOT_FRIENDS
             binding.btnRefuseFriend.isVisible = false
@@ -167,6 +168,36 @@ class FriendProfileActivity  : AppCompatActivity()  {
         binding.btnAddFriend.setOnClickListener {
             auth.uid?.let { it1 -> databaseRequestRef.child(it1).child(userId).removeValue()
                 databaseRequestRef.child(userId).child(it1).removeValue()
+
+
+                databaseUserRef.child(it1).child("Friends")
+                    .addListenerForSingleValueEvent(object : ValueEventListener {
+                        override fun onDataChange(ds: DataSnapshot) {
+                            ds.child(userId).children
+                            for (ds in ds.children) {
+                                if (ds.value.toString() == userId) {
+                                    ds.ref.removeValue()
+                            }
+                            }
+                        }
+                        override fun onCancelled(error: DatabaseError) {
+                        }
+                    })
+                databaseUserRef.child(userId).child("Friends")
+                    .addListenerForSingleValueEvent(object : ValueEventListener {
+                        override fun onDataChange(ds: DataSnapshot) {
+                            ds.child(it1).children
+                            for (ds in ds.children) {
+                                if (ds.value.toString() == userId) {
+                                    ds.ref.removeValue()
+                                }
+                            }
+                        }
+                        override fun onCancelled(error: DatabaseError) {
+                        }
+                    })
+                databaseUserRef.child(it1).child("Friends").child(userId).ref.removeValue()
+                databaseUserRef.child(userId).child("Friends").child(it1).ref.removeValue()
                 binding.btnAddFriend.text = "Add Friend"
                 CURRENT_STATE = STATE_NOT_FRIENDS
                 setupAddFriend()

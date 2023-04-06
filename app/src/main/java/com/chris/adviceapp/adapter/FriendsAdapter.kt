@@ -36,7 +36,7 @@ class FriendsAdapter(
         Glide.with(context).load(allFriends[position].profileImageUrl).apply(RequestOptions().transform(CircleCrop())).into((holder.ivUser))
         holder.tvUser.text = allFriends[position].userEmail
         holder.tvFriends.setOnClickListener {
-            friendClickInterface.onUserClick(allFriends[position].userEmail)
+            friendClickInterface.onFriendClick(allFriends[position].userEmail)
         }
     }
 
@@ -58,5 +58,5 @@ class FriendsAdapter(
 }
 
 interface FriendClickInterface {
-    fun onUserClick(userEmail : String)
+    fun onFriendClick(userEmail : String)
 }
