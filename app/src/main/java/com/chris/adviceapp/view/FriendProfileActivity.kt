@@ -41,6 +41,7 @@ class FriendProfileActivity  : AppCompatActivity()  {
         fetchUserFromDatabase()
         setupAddFriend()
         setupButtons()
+        setVisibilityForShimmerLayout()
     }
 
     private fun fetchUserFromDatabase() {
@@ -61,6 +62,7 @@ class FriendProfileActivity  : AppCompatActivity()  {
                     if (auth.uid == userId) {
                         binding.btnAddFriend.isVisible = false
                     }
+                    setVisibilityFalseForShimmerLayout()
                 }
             }
             override fun onCancelled(databaseError: DatabaseError) {}
@@ -218,6 +220,20 @@ class FriendProfileActivity  : AppCompatActivity()  {
             }
         } catch(e: Exception) {
             Log.e(TAG, e.toString())
+        }
+    }
+
+    private fun setVisibilityForShimmerLayout() {
+        with(binding) {
+            layoutFriendProfile.isVisible = false
+            shimmerLayoutFriendProfile.isVisible = true
+        }
+    }
+
+    private fun setVisibilityFalseForShimmerLayout() {
+        with(binding) {
+            layoutFriendProfile.isVisible = true
+            shimmerLayoutFriendProfile.isVisible = false
         }
     }
 

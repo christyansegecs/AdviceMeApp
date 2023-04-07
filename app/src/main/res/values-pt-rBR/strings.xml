@@ -61,8 +61,8 @@
     <string name="menu_user_profile">Perfil do Usuário</string>
     <string name="tv_user_name">Nome do Usuário</string>
     <string name="toast_user_created">Bem Vindo! Usuário Criado</string>
-    <string name="tv_change_user_image">clique aqui para trocar sua Foto de Perfil</string>
-    <string name="tv_change_user_name">clique aqui para trocar seu nome de usuário</string>
+    <string name="tv_change_user_image">clique na foto para trocar sua Foto do Perfil</string>
+    <string name="tv_change_user_name">clique no seu nome de usuário para trocá-lo</string>
     <string name="error_input_an_user_name">Insira um Nome de Usuário</string>
     <string name="ic_hide_password">Esconda a Senha</string>
     <string name="toast_picture_uploaded">Sua Foto de Perfil foi alterada</string>

@@ -40,6 +40,7 @@ class UserProfileActivity  : AppCompatActivity() {
         firebaseViewModel.getCurrentUser()
         fetchUserProfilePicture()
         fetchUserName()
+        setVisibilityForShimmerLayout()
         setOnClickListeners()
     }
 
@@ -47,6 +48,7 @@ class UserProfileActivity  : AppCompatActivity() {
         databaseUserPictureRef.addListenerForSingleValueEvent(object: ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 Glide.with(this@UserProfileActivity).load(snapshot.value.toString()).into(binding.ivUserProfile)
+                setVisibilityFalseForShimmerLayout()
             }
             override fun onCancelled(error: DatabaseError) {
                 Log.d("snapshot", "something went wrong")
@@ -67,10 +69,10 @@ class UserProfileActivity  : AppCompatActivity() {
     }
 
     private fun setOnClickListeners() {
-        binding.tvChangeImageUser.setOnClickListener{
+        binding.ivUserProfile.setOnClickListener{
             chooseImage()
         }
-        binding.tvChangeUserName.setOnClickListener{
+        binding.tvUserName.setOnClickListener{
             uploadUserNameInDatabase()
         }
         binding.icCheck.setOnClickListener{
@@ -133,15 +135,34 @@ class UserProfileActivity  : AppCompatActivity() {
     }
 
     private fun uploadUserNameInDatabase() {
-        binding.tvUserName.isVisible = false
-        binding.editUserName.isVisible = true
-        binding.icCheck.isVisible = true
+        with(binding) {
+            tvUserName.isVisible = false
+            editUserName.isVisible = true
+            icCheck.isVisible = true
+        }
+
     }
 
     private fun changeViewVisibility() {
-        binding.editUserName.isVisible = false
-        binding.icCheck.isVisible = false
-        binding.tvUserName.isVisible = true
+        with(binding) {
+            editUserName.isVisible = false
+            icCheck.isVisible = false
+            tvUserName.isVisible = true
+        }
+    }
+
+    private fun setVisibilityForShimmerLayout() {
+        with(binding) {
+            layoutUserProfile.isVisible = false
+            shimmerLayoutUserProfile.isVisible = true
+        }
+    }
+
+    private fun setVisibilityFalseForShimmerLayout() {
+        with(binding) {
+            layoutUserProfile.isVisible = true
+            shimmerLayoutUserProfile.isVisible = false
+        }
     }
 
     companion object {

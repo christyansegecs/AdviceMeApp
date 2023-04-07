@@ -71,8 +71,8 @@
     <string name="toast_user_created">Welcome! User Created</string>
     <string name="toast_picture_uploaded">Your Profile Picture was uploaded</string>
     <string name="toast_username_uploaded">Your Username was uploaded</string>
-    <string name="tv_change_user_name">click here to change your username</string>
-    <string name="tv_change_user_image">click here to change your profile image</string>
+    <string name="tv_change_user_name">click in your username to change it</string>
+    <string name="tv_change_user_image">click in the picture to change your profile picture</string>
     <string name="ic_hide_password">hide password</string>
     <string name="edit_new_username">New Username</string>
     <string name="apply_new_username">Apply New Username</string>
